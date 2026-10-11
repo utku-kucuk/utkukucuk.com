@@ -1,0 +1,33 @@
+---
+title: Smart Home IoT Suite
+tagline: Self-hosted Home Assistant'a bağlı ESP32 cihazları
+summary: Motorlu bir akıllı perde, akıllı lamba ve iklim sensörlerinden oluşan ESP32 cihaz ailesi; Linux üzerinde Docker'da çalışan self-hosted Home Assistant sunucusuyla MQTT üzerinden konuşuyor.
+order: 4
+role: Donanım, firmware ve ev sunucusu
+stack: [ESP32, ESPHome, C/C++, MQTT, Home Assistant, Docker, Linux]
+repo: https://github.com/utku-kucuk/SmartBlind-ESP32
+diagram: smarthome
+highlights:
+  - Limit switch'li ve fiziksel kontrollü NEMA17 step motorlu perde
+  - Cihazlar ile ev sunucusu arasında MQTT mesajlaşma
+  - Home Assistant'a periyodik veri gönderen iklim sensörleri
+  - Linux üzerinde Docker'da self-hosted Home Assistant
+---
+
+## Fikir
+
+Ev otomasyonumun **yerel, gizli ve kurcalanabilir** olmasını istedim — üretici bulutu yok, abonelik yok ve GPIO pinine kadar anladığım donanım.
+
+## Ne geliştirdim
+
+- **Akıllı perde.** Bir ESP32, A4988 sürücü üzerinden NEMA17 step motoru 1/8 mikro adımla sürüyor. Üst ve alt limit switch'ler motoru güvenle durduruyor, fiziksel butonlar manuel aç / kapa / dur sağlıyor ve firmware uzun hareketlerde motoru korumak için soğuma molaları ekliyor.
+- **Akıllı lamba.** Dokunmatik ekran kontrollü, renk efektli ve MQTT entegrasyonlu bir LED lamba.
+- **İklim sensörleri.** Oda sıcaklığı ve nemi için DHT22 tabanlı monitörler — LiPo bataryayla çalışan ve 3D yazıcı filament kutularının içine yerleştirilen bir tanesi dahil.
+
+## Nasıl birleşiyor
+
+Her cihaz ESPHome ile (gerektiğinde özel C/C++ ile) yapılandırılıyor ve ev sunucusuyla **MQTT** üzerinden konuşuyor. Home Assistant **Linux bir makinede Docker** içinde çalışıyor ve her cihazı dashboard ve otomasyonlar için entity olarak sunuyor.
+
+## Neden burada
+
+Backend işiyle aynı disiplin, sadece daha küçük ölçekte: mesaj tabanlı entegrasyon, tasarlaman gereken hata senaryoları ve kendin işlettiğin bir sunucu.

@@ -1,0 +1,35 @@
+---
+title: Commerce Platform
+tagline: E-commerce backend as Spring Boot microservices
+summary: Catalog, cart and order domains split into Spring Boot services behind stateless JWT security, documented with OpenAPI and shipped in containers.
+order: 1
+role: Backend engineer — design & implementation
+stack: [Java, Spring Boot 3, Spring Security, Spring Data JPA, PostgreSQL, Docker, JUnit, Mockito]
+repo: https://github.com/utku-kucuk/commerce-platform
+diagram: commerce
+highlights:
+  - Domain-split services for catalog, cart and order
+  - Stateless JWT authentication with role-based access control
+  - Unit and integration tests with JUnit and Mockito
+  - Every service containerised with its PostgreSQL database
+---
+
+## The problem
+
+Most e-commerce tutorials stop at a single CRUD app. I wanted a backend that looks like the systems I'd work on in a team: clear domain boundaries, a security layer that doesn't leak into business code, and services that can be built, tested and deployed independently.
+
+## What I built
+
+The platform is split along its domains — **catalog**, **cart** and **order** — each a Spring Boot 3 service with its own REST API documented through OpenAPI. Persistence goes through Spring Data JPA on PostgreSQL, and every service ships as a Docker image so the whole system comes up with one command.
+
+Security is handled by **Spring Security with stateless JWTs**: a token carries the user's roles, and each service enforces role-based access on its own endpoints. That keeps services horizontally scalable — there is no shared session store to coordinate.
+
+## Engineering notes
+
+- **Testing as a design tool.** Business logic is unit-tested with JUnit and Mockito; integration tests exercise the HTTP layer and the database together so that contract changes are caught early.
+- **API first.** OpenAPI specs make each service self-describing and give consumers a contract to code against.
+- **Containers from day one.** Running each service with its own PostgreSQL instance in Docker keeps local and CI environments identical.
+
+## What's next
+
+Service discovery and an API gateway, asynchronous order events over a message broker, and deploying the stack to Kubernetes — the cloud-native direction I'm actively growing into.
