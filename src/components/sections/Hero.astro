@@ -122,7 +122,6 @@ const t = useTranslations(locale);
 <script>
   import {
     gsap,
-    initMagnetic,
     prefersReducedMotion,
     revealAll,
     ScrollTrigger,
@@ -199,7 +198,6 @@ const t = useTranslations(locale);
   }
 
   intro();
-  initMagnetic(hero ?? document);
   const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
   idle(() => void loadScene());
 </script>

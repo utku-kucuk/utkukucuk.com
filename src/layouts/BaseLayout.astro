@@ -1,10 +1,12 @@
 ---
 import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
+import 'lenis/dist/lenis.css';
 import '@/styles/global.css';
 
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
+import Cursor from '@/components/ui/Cursor.astro';
 import { languages, type Locale } from '@/i18n/ui';
 import { getLocale, switchLocalePath, useTranslations } from '@/i18n/utils';
 
@@ -72,5 +74,9 @@ const alternates = (Object.keys(languages) as Locale[]).map((l) => ({
       <slot />
     </main>
     <Footer />
+    <Cursor />
+    <script>
+      import '@/scripts/site';
+    </script>
   </body>
 </html>

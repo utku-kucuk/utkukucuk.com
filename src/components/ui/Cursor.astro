@@ -1,0 +1,59 @@
+<div
+  aria-hidden="true"
+  data-cursor
+  class="cursor pointer-events-none fixed top-0 left-0 z-[60] hidden opacity-0 transition-opacity duration-300 data-[visible]:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:block"
+>
+  <span class="cursor-ring"></span>
+  <span class="cursor-dot"></span>
+</div>
+
+<div
+  aria-hidden="true"
+  data-scroll-progress
+  class="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 origin-left scale-x-0 bg-linear-to-r from-accent to-accent-2"
+></div>
+
+<style>
+  .cursor-dot,
+  .cursor-ring {
+    position: absolute;
+    border-radius: 9999px;
+    translate: -50% -50%;
+    transition:
+      width 0.35s var(--ease-out-expo),
+      height 0.35s var(--ease-out-expo),
+      background-color 0.35s,
+      border-color 0.35s;
+  }
+
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--fg);
+  }
+
+  .cursor-ring {
+    width: 34px;
+    height: 34px;
+    border: 1px solid color-mix(in srgb, var(--fg) 35%, transparent);
+  }
+
+  [data-cursor][data-hover] .cursor-ring {
+    width: 58px;
+    height: 58px;
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  [data-cursor][data-hover] .cursor-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-cursor] {
+      display: none !important;
+    }
+  }
+</style>
