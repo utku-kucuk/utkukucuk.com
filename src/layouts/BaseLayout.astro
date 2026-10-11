@@ -7,17 +7,49 @@ import '@/styles/global.css';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import Cursor from '@/components/ui/Cursor.astro';
+import { site } from '@/data/site';
 import { languages, type Locale } from '@/i18n/ui';
 import { getLocale, switchLocalePath, useTranslations } from '@/i18n/utils';
 
 interface Props {
   title?: string;
   description?: string;
+  /** 'website' for the home page, 'article' for case studies */
+  type?: 'website' | 'article';
 }
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
-const { title = t('meta.title'), description = t('meta.description') } = Astro.props;
+const {
+  title = t('meta.title'),
+  description = t('meta.description'),
+  type = 'website',
+} = Astro.props;
+const ogImage = new URL(`/og/og-${locale}.jpg`, Astro.site).href;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  alternateName: site.shortName,
+  url: site.url,
+  image: new URL('/og/og-en.jpg', Astro.site).href,
+  jobTitle: 'Backend Software Engineer',
+  email: `mailto:${site.email}`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Istanbul', addressCountry: 'TR' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Istanbul Aydın University' },
+  knowsAbout: [
+    'Java',
+    'Spring Boot',
+    'REST APIs',
+    'Microservices',
+    'PostgreSQL',
+    'Docker',
+    'Linux',
+    'CI/CD',
+  ],
+  sameAs: [site.socials.github, site.socials.linkedin],
+};
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const alternates = (Object.keys(languages) as Locale[]).map((l) => ({
@@ -39,7 +71,27 @@ const alternates = (Object.keys(languages) as Locale[]).map((l) => ({
     ))}
     <link rel="alternate" hreflang="x-default" href={alternates[0]?.href} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#07080b" />
+    <meta name="author" content={site.name} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.shortName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:locale" content={locale === 'tr' ? 'tr_TR' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'tr' ? 'en_US' : 'tr_TR'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     <meta name="generator" content={Astro.generator} />
 
     <script is:inline>
