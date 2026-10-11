@@ -1,0 +1,170 @@
+---
+import { render } from 'astro:content';
+
+import ArchDiagram from '@/components/projects/ArchDiagram.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { Locale } from '@/i18n/ui';
+import { localizePath, useTranslations } from '@/i18n/utils';
+import type { Project } from '@/lib/projects';
+
+interface Props {
+  project: Project;
+  next: Project;
+  locale: Locale;
+}
+
+const { project, next, locale } = Astro.props;
+const t = useTranslations(locale);
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${data.title} — Utku Küçük`} description={data.summary} type="article">
+  <article class="pt-32 pb-24 md:pt-40">
+    <div class="container-site">
+      <a
+        href={localizePath('/#work', locale)}
+        class="group inline-flex items-center gap-2 font-mono text-xs tracking-wider text-fg-subtle uppercase transition-colors hover:text-fg"
+      >
+        <span aria-hidden="true" class="transition-transform group-hover:-translate-x-1">
+          ←
+        </span>
+        {t('project.back')}
+      </a>
+
+      <header class="mt-10 max-w-4xl">
+        <p data-reveal class="eyebrow mb-4 text-accent">
+          {data.tagline}
+        </p>
+        <h1
+          data-reveal-lines
+          class="text-[clamp(2.8rem,8vw,6rem)] leading-[0.95] font-semibold tracking-[-0.04em]"
+        >
+          {data.title}
+        </h1>
+        <p data-reveal class="mt-6 max-w-2xl text-xl text-pretty text-fg-muted">
+          {data.summary}
+        </p>
+      </header>
+
+      <dl
+        data-reveal
+        class="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3"
+      >
+        <div class="bg-bg p-5">
+          <dt class="eyebrow mb-2">{t('project.role')}</dt>
+          <dd class="text-sm">{data.role}</dd>
+        </div>
+        <div class="bg-bg p-5 sm:col-span-2">
+          <dt class="eyebrow mb-2">{t('project.stack')}</dt>
+          <dd>
+            <ul class="flex flex-wrap gap-1.5">
+              {data.stack.map((s) => (
+                <li class="rounded-full border border-line px-2.5 py-1 font-mono text-xs text-fg-muted">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+
+      <figure data-reveal class="mt-10 rounded-3xl border border-line bg-bg-elevated/60 p-4 sm:p-8">
+        <ArchDiagram name={data.diagram} title={`${data.title} — ${t('project.architecture')}`} />
+        <figcaption class="eyebrow mt-4 text-center">{t('project.architecture')}</figcaption>
+      </figure>
+
+      <div class="mt-20 grid gap-14 lg:grid-cols-12">
+        <aside class="lg:col-span-4">
+          <div class="lg:sticky lg:top-28">
+            <h2 class="eyebrow mb-5">{t('project.highlights')}</h2>
+            <ul class="space-y-3">
+              {data.highlights.map((h) => (
+                <li data-reveal class="flex gap-3 border-t border-line pt-3 text-sm">
+                  <span
+                    class="mt-[0.5em] size-1.5 shrink-0 rounded-full bg-accent-2"
+                    aria-hidden="true"
+                  />
+                  {h}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={data.repo}
+              target="_blank"
+              rel="noopener"
+              data-magnetic="0.2"
+              class="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-fg-subtle"
+            >
+              {t('project.viewSource')} ↗
+            </a>
+          </div>
+        </aside>
+
+        <div class="prose-project lg:col-span-7 lg:col-start-6">
+          <Content />
+        </div>
+      </div>
+
+      <a
+        href={localizePath(`/projects/${next.slug}/`, locale)}
+        class="group mt-28 flex flex-col gap-3 border-t border-line pt-10"
+      >
+        <span class="eyebrow">{t('project.next')}</span>
+        <span class="flex items-center justify-between gap-6 text-[clamp(2rem,6vw,4.5rem)] leading-none font-semibold tracking-[-0.04em] transition-colors group-hover:text-accent">
+          {next.data.title}
+          <span
+            aria-hidden="true"
+            class="transition-transform duration-500 group-hover:translate-x-2"
+          >
+            →
+          </span>
+        </span>
+      </a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-project :global(h2) {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .prose-project :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .prose-project :global(p),
+  .prose-project :global(li) {
+    color: var(--fg-muted);
+    font-size: 1.075rem;
+    line-height: 1.75;
+  }
+  .prose-project :global(p + p) {
+    margin-top: 1rem;
+  }
+  .prose-project :global(ul) {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .prose-project :global(li) {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+  .prose-project :global(li)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.85em;
+    width: 0.6rem;
+    height: 1px;
+    background: var(--fg-subtle);
+  }
+  .prose-project :global(strong) {
+    color: var(--fg);
+    font-weight: 600;
+  }
+</style>

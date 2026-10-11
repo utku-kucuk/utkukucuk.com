@@ -1,0 +1,36 @@
+---
+title: IronEcho
+tagline: Offline-first, self-hosted fitness platformu
+summary: Sinyalin olmadığı bodrum katındaki salonda bile çalışan bir fitness uygulaması — local-first yazma, çakışma çözümlemeli özel bir senkronizasyon motoru ve tek komutla kurulan self-hosted backend.
+order: 3
+role: Backend ve senkronizasyon motoru
+stack: [Node.js, TypeScript, Express, MongoDB, Realm, Socket.io, Docker Compose, JWT]
+repo: https://github.com/utku-kucuk/IronEcho
+diagram: ironecho
+highlights:
+  - Sunucu taraflı çakışma çözümlemeli özel senkronizasyon
+  - Realm üzerinde offline-first istemci, bağlantı gelince kuyruktaki yazmalar tekrar oynatılıyor
+  - JWT access + refresh token akışı
+  - Raspberry Pi'ye kadar tek komutla Docker Compose kurulumu
+---
+
+## Problem
+
+Spor salonları bağlantı açısından kötü yerlerdir; çoğu fitness uygulaması da ya offline çalışmaz ya da sağlık verilerinizi sessizce paraya çevirir. IronEcho'nun **sıfır sinyalde kullanılabilir** olması ve **tamamen kullanıcısına ait** olması gerekiyordu.
+
+## Ne geliştirdim
+
+Backend'i ve senkronizasyon motorunu tasarladım.
+
+- **Local-first.** Mobil istemci anında Realm'e yazıyor; her değişiklik kaydedilip kuyruğa alınıyor.
+- **Senkronizasyon ve çakışma çözümleme.** Bağlantı geldiğinde kuyruktaki işlemler API'ye karşı tekrar oynatılıyor. Sunucu her değişikliği doğruluyor ve çakışmaları sunucu kurallarıyla korunan last-write-wins stratejisiyle çözüyor; veri cihazlar arasında tutarlı kalıyor.
+- **Gerçek zamanlı güncellemeler.** Socket.io değişiklikleri bağlı diğer oturumlara iletiyor.
+- **Güvenlik.** Ayrı access ve refresh token'lı stateless JWT, Helmet, rate limiting ve her girdide Joi validation.
+
+## İşletme
+
+MongoDB veri modelleri antrenmanları, setleri, vücut ölçülerini ve analitiği kapsıyor. Tüm backend bir **Docker Compose** stack'i olarak geliyor — tek komutla bir VPS'te ya da ev laboratuvarındaki bir Raspberry Pi'de ayağa kalkıyor.
+
+## Neyi geliştirirdim
+
+Daha zengin eşzamanlı düzenlemeler için last-write-wins yerine alan bazlı birleştirme (veya CRDT) kullanmak ve dengesiz ağları simüle eden uçtan uca testler eklemek.

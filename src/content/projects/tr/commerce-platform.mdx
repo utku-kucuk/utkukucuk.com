@@ -1,0 +1,35 @@
+---
+title: Commerce Platform
+tagline: Spring Boot microservice'leriyle e-ticaret backend'i
+summary: Katalog, sepet ve sipariş alanları; stateless JWT güvenliği arkasında Spring Boot servislerine ayrıldı, OpenAPI ile dokümante edildi ve container'larla paketlendi.
+order: 1
+role: Backend mühendisi — tasarım ve geliştirme
+stack: [Java, Spring Boot 3, Spring Security, Spring Data JPA, PostgreSQL, Docker, JUnit, Mockito]
+repo: https://github.com/utku-kucuk/commerce-platform
+diagram: commerce
+highlights:
+  - Katalog, sepet ve sipariş için alan bazlı servisler
+  - Rol bazlı yetkilendirmeli stateless JWT kimlik doğrulama
+  - JUnit ve Mockito ile unit ve integration testler
+  - Her servis kendi PostgreSQL veritabanıyla container'da
+---
+
+## Problem
+
+E-ticaret örneklerinin çoğu tek bir CRUD uygulamasında kalıyor. Ben bir ekipte çalışacağım sistemlere benzeyen bir backend istedim: net alan sınırları, iş koduna sızmayan bir güvenlik katmanı ve bağımsız olarak derlenip test edilip deploy edilebilen servisler.
+
+## Ne geliştirdim
+
+Platform alanlarına göre bölündü: **katalog**, **sepet** ve **sipariş**. Her biri, OpenAPI ile dokümante edilmiş kendi REST API'sine sahip bir Spring Boot 3 servisi. Kalıcılık PostgreSQL üzerinde Spring Data JPA ile sağlanıyor; her servis bir Docker imajı olarak paketleniyor ve tüm sistem tek komutla ayağa kalkıyor.
+
+Güvenlik **Spring Security ve stateless JWT** ile yönetiliyor: token kullanıcının rollerini taşıyor ve her servis kendi endpoint'lerinde rol bazlı erişimi uyguluyor. Paylaşılan bir session store olmadığı için servisler yatayda ölçeklenebiliyor.
+
+## Mühendislik notları
+
+- **Tasarım aracı olarak test.** İş mantığı JUnit ve Mockito ile unit test ediliyor; integration testler HTTP katmanını ve veritabanını birlikte çalıştırarak sözleşme değişikliklerini erkenden yakalıyor.
+- **Önce API.** OpenAPI spesifikasyonları her servisi kendini tanımlayan hale getiriyor ve tüketicilere üzerine kod yazabilecekleri bir sözleşme sunuyor.
+- **İlk günden container.** Her servisi kendi PostgreSQL örneğiyle Docker'da çalıştırmak, lokal ve CI ortamlarını birebir aynı tutuyor.
+
+## Sırada ne var
+
+Service discovery ve API gateway, mesaj kuyruğu üzerinden asenkron sipariş event'leri ve sistemi Kubernetes'e taşımak — aktif olarak geliştiğim cloud-native yön.

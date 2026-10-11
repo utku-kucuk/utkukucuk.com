@@ -1,0 +1,35 @@
+---
+title: Viducate
+tagline: HLS streaming pipeline'ına sahip video eğitim platformu
+summary: Öğretmenlerin çok GB'lık dersler yüklediği, öğrencilerin ise adaptif olarak izlediği bir online eğitim platformu — parçalı upload, FFmpeg transcoding ve üç rollü RBAC ile.
+order: 2
+role: Backend ve video pipeline
+stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
+repo: https://github.com/utku-kucuk/viducate
+diagram: viducate
+highlights:
+  - Çok GB'lık ders videoları için parçalı ve devam ettirilebilir upload
+  - FFmpeg ile HLS adaptive stream'e transcoding
+  - Admin / Teacher / Student rolleriyle JWT + LDAP kimlik doğrulama
+  - Linux üzerinde Docker ve Nginx arkasında yayında
+---
+
+## Problem
+
+Ders videoları büyük — çoğu zaman birkaç gigabayt — ve öğretmenler bunları sıradan bağlantılarla yüklüyor. Tek bir başarısız istek bir saatlik yüklemeyi boşa çıkarmamalı; yavaş ağdaki öğrenciler de akıcı bir oynatma deneyimi yaşamalı.
+
+## Ne geliştirdim
+
+Yapılandırılmış video kursları, quiz'ler ve ilerleme takibi sunan Viducate'in backend'ini ve **video pipeline'ını** tasarladım.
+
+- **Parçalı, devam ettirilebilir upload.** Dosyalar parçalar halinde gönderiliyor ve sunucuda birleştiriliyor; kesilen bir yükleme baştan değil, son parçadan devam ediyor.
+- **HLS'e transcoding.** Yükleme sonrası FFmpeg kaynağı HLS çözünürlüklerine dönüştürüyor; oynatıcı kaliteyi her öğrencinin bant genişliğine göre ayarlıyor. Süre ve thumbnail gibi metadata aynı adımda çıkarılıp PostgreSQL'e kaydediliyor.
+- **Erişim kontrolü.** Üç rollü JWT kimlik doğrulama — **Admin**, **Teacher** ve **Student** — kurumsal kurulumlar için LDAP/Active Directory girişi ve hassas route'larda rate limiting.
+
+## İşletme
+
+Platform Linux üzerinde Docker'da çalışıyor; **Nginx** reverse proxy olarak TLS'i sonlandırıyor ve stream segmentlerini verimli şekilde sunuyor, Express API ise iş mantığını yönetiyor.
+
+## Neyi geliştirirdim
+
+Transcoding'i kuyruk tabanlı bir worker havuzuna taşıyarak upload'ların CPU yoğun işleri beklememesini sağlamak ve HLS segmentlerini önünde CDN olan bir object storage'a koymak.

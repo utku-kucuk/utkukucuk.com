@@ -1,0 +1,35 @@
+---
+title: Viducate
+tagline: Video learning platform with an HLS streaming pipeline
+summary: An online education platform where teachers upload multi-GB lectures and students stream them adaptively — with chunked uploads, FFmpeg transcoding and three-role RBAC.
+order: 2
+role: Backend & video pipeline
+stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
+repo: https://github.com/utku-kucuk/viducate
+diagram: viducate
+highlights:
+  - Chunked, resumable uploads for multi-GB lecture videos
+  - FFmpeg transcoding to HLS adaptive streams
+  - JWT + LDAP auth with Admin / Teacher / Student roles
+  - Deployed on Linux with Docker behind Nginx
+---
+
+## The problem
+
+Lecture videos are large — often several gigabytes — and teachers upload them over ordinary connections. A single failed request shouldn't throw away an hour of uploading, and students on slow networks still need smooth playback.
+
+## What I built
+
+I designed the backend and the **video pipeline** of Viducate, a platform for structured video courses, quizzes and progress tracking.
+
+- **Chunked, resumable uploads.** Files are sent in chunks that the server reassembles, so an interrupted upload resumes from the last chunk instead of starting over.
+- **Transcoding to HLS.** After upload, FFmpeg transcodes the source into HLS renditions, letting the player adapt quality to each student's bandwidth. Metadata such as duration and thumbnails is extracted in the same step and stored in PostgreSQL.
+- **Access control.** JWT authentication with three roles — **Admin**, **Teacher** and **Student** — plus LDAP/Active Directory login for institutional deployments and rate limiting on sensitive routes.
+
+## Running it
+
+The platform runs on Linux in Docker, with **Nginx** as reverse proxy terminating TLS and serving the stream segments efficiently, while the Express API handles business logic.
+
+## What I'd improve
+
+Move transcoding to a queue-backed worker pool so uploads never wait on CPU-heavy jobs, and push HLS segments to object storage with a CDN in front.

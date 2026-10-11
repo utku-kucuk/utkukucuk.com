@@ -1,0 +1,101 @@
+---
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { site } from '@/data/site';
+import { getLocale, useTranslations } from '@/i18n/utils';
+import { getProjects } from '@/lib/projects';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const projects = await getProjects(locale);
+---
+
+<section id="work" data-work class="relative py-28 md:py-40 lg:pb-0">
+  <div class="container-site">
+    <SectionHeading
+      index="03"
+      eyebrow={t('work.eyebrow')}
+      title={t('work.title')}
+      subtitle={t('work.subtitle')}
+    />
+  </div>
+
+  <!-- Vertical list on small screens; pinned horizontal track on large screens -->
+  <div data-hscroll class="lg:flex lg:h-dvh lg:items-center lg:overflow-hidden">
+    <ol
+      data-hscroll-track
+      class="container-site grid gap-6 md:grid-cols-2 lg:flex lg:w-max lg:max-w-none lg:gap-8 lg:pr-[10vw]"
+    >
+      {projects.map((project, i) => (
+        <li data-reveal class="lg:w-[min(46rem,62vw)] lg:shrink-0">
+          <ProjectCard project={project} index={i} total={projects.length} locale={locale} />
+        </li>
+      ))}
+      <li class="flex items-center lg:w-[18rem] lg:shrink-0" data-reveal>
+        <a
+          href={site.socials.github}
+          target="_blank"
+          rel="noopener"
+          data-magnetic="0.2"
+          class="group flex w-full items-center justify-between gap-4 rounded-3xl border border-dashed border-line p-8 text-lg font-medium transition-colors hover:border-accent lg:aspect-square lg:flex-col lg:items-start lg:justify-end"
+        >
+          {t('work.more')}
+          <span
+            aria-hidden="true"
+            class="grid size-12 place-items-center rounded-full border border-line transition-all group-hover:border-accent group-hover:bg-accent group-hover:text-accent-contrast"
+          >
+            ↗
+          </span>
+        </a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<script>
+  import { gsap, hasFinePointer, prefersReducedMotion, ScrollTrigger } from '@/scripts/motion';
+
+  const section = document.querySelector<HTMLElement>('[data-work]');
+  const wrapper = section?.querySelector<HTMLElement>('[data-hscroll]');
+  const track = section?.querySelector<HTMLElement>('[data-hscroll-track]');
+
+  if (section && wrapper && track && !prefersReducedMotion()) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px)', () => {
+      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: wrapper,
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      });
+    });
+
+    // Subtle 3D tilt on cards
+    if (hasFinePointer()) {
+      section.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+        gsap.set(card, { transformPerspective: 900 });
+        const rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3' });
+        const ry = gsap.quickTo(card, 'rotationY', { duration: 0.6, ease: 'power3' });
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          ry(((e.clientX - r.left) / r.width - 0.5) * 6);
+          rx(-((e.clientY - r.top) / r.height - 0.5) * 6);
+        });
+        card.addEventListener('pointerleave', () => {
+          rx(0);
+          ry(0);
+        });
+      });
+    }
+
+    // Images/fonts can change heights after load
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+  }
+</script>
