@@ -35,12 +35,13 @@ const t = useTranslations(locale);
     </p>
     <h1
       data-hero-title
+      aria-label="Utku Küçük"
       class="text-[clamp(3.5rem,13vw,9.5rem)] leading-[0.88] font-semibold tracking-[-0.045em]"
     >
-      <span data-split class="block">
+      <span data-split aria-hidden="true" class="block">
         Utku
       </span>
-      <span class="block overflow-hidden pb-[0.08em]">
+      <span aria-hidden="true" class="block overflow-hidden pb-[0.08em]">
         <span data-rise class="text-gradient inline-block">
           Küçük
         </span>
@@ -142,6 +143,7 @@ const t = useTranslations(locale);
     const split = SplitText.create(title.querySelector('[data-split]'), {
       type: 'chars',
       mask: 'chars',
+      aria: 'none', // the <h1> carries the accessible name
     });
     revealAll();
     gsap
@@ -169,7 +171,7 @@ const t = useTranslations(locale);
     if (!canvas || !hero || !supportsWebGL()) return;
     const { initHeroScene } = await import('@/scripts/hero-scene');
     const scene = initHeroScene(canvas, { reducedMotion: reduced });
-    if (!reduced) {
+    if (scene && !reduced) {
       ScrollTrigger.create({
         trigger: hero,
         start: 'top top',
