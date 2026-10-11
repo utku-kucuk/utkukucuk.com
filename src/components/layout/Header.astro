@@ -1,0 +1,176 @@
+---
+import ThemeToggle from '@/components/ui/ThemeToggle.astro';
+import {
+  getLocale,
+  localizePath,
+  otherLocale,
+  switchLocalePath,
+  useTranslations,
+} from '@/i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const home = localizePath('/', locale);
+
+const links = [
+  { id: 'about', label: t('nav.about') },
+  { id: 'experience', label: t('nav.experience') },
+  { id: 'work', label: t('nav.work') },
+  { id: 'stack', label: t('nav.stack') },
+  { id: 'contact', label: t('nav.contact') },
+];
+
+const target = otherLocale(locale);
+---
+
+<header
+  data-header
+  class="fixed inset-x-0 top-0 z-40 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300 data-[scrolled]:border-line data-[scrolled]:bg-bg/70 data-[scrolled]:backdrop-blur-xl"
+>
+  <div class="container-site flex h-16 items-center justify-between gap-6">
+    <a href={home} class="group flex items-center gap-3" aria-label="Utku Küçük — home">
+      <span class="grid size-9 place-items-center rounded-lg border border-line font-mono text-sm font-semibold transition-colors group-hover:border-accent group-hover:text-accent">
+        uk
+      </span>
+      <span class="hidden text-sm font-medium tracking-tight sm:inline">Utku Küçük</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden md:block">
+      <ul class="flex items-center gap-1">
+        {links.map((l) => (
+          <li>
+            <a
+              href={`${home}#${l.id}`}
+              data-nav-link={l.id}
+              class="relative rounded-full px-3 py-1.5 text-sm text-fg-muted transition-colors hover:text-fg aria-[current=true]:text-fg"
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={switchLocalePath(Astro.url, target)}
+        hreflang={target}
+        lang={target}
+        aria-label={t('lang.switchLabel')}
+        class="grid h-9 place-items-center rounded-full border border-line px-3 font-mono text-xs tracking-wider text-fg-muted uppercase transition-colors hover:border-fg-subtle hover:text-fg"
+      >
+        {target}
+      </a>
+      <ThemeToggle />
+      <button
+        type="button"
+        data-menu-open
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        class="grid size-9 place-items-center rounded-full border border-line md:hidden"
+      >
+        <span class="sr-only">{t('nav.menu')}</span>
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M4 8h16M4 16h16" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  data-menu
+  hidden
+  class="fixed inset-0 z-50 flex flex-col bg-bg/95 backdrop-blur-xl md:hidden"
+>
+  <div class="container-site flex h-16 items-center justify-end">
+    <button
+      type="button"
+      data-menu-close
+      class="grid size-9 place-items-center rounded-full border border-line"
+    >
+      <span class="sr-only">{t('nav.close')}</span>
+      <svg
+        class="size-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+  <nav aria-label="Mobile" class="container-site flex flex-1 flex-col justify-center">
+    <ol class="space-y-4">
+      {links.map((l, i) => (
+        <li>
+          <a
+            href={`${home}#${l.id}`}
+            data-menu-link
+            class="group flex items-baseline gap-4 text-4xl font-semibold tracking-tight"
+          >
+            <span class="font-mono text-xs text-fg-subtle">0{i + 1}</span>
+            <span class="transition-colors group-hover:text-accent">{l.label}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+</div>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const onScroll = () => header?.toggleAttribute('data-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+  const setMenu = (open: boolean) => {
+    if (!menu || !openBtn) return;
+    menu.hidden = !open;
+    openBtn.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    (open ? closeBtn : openBtn)?.focus();
+  };
+  openBtn?.addEventListener('click', () => setMenu(true));
+  closeBtn?.addEventListener('click', () => setMenu(false));
+  menu
+    ?.querySelectorAll('[data-menu-link]')
+    .forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) setMenu(false);
+  });
+
+  // Active section highlighting
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  const sections = [...links]
+    .map((l) => document.getElementById(l.dataset.navLink ?? ''))
+    .filter((s): s is HTMLElement => s !== null);
+  if (sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((l) =>
+            l.setAttribute('aria-current', String(l.dataset.navLink === entry.target.id)),
+          );
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import { site } from '@/data/site';
+import { getLocale, useTranslations } from '@/i18n/utils';
+
+const t = useTranslations(getLocale(Astro.url));
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line">
+  <div class="container-site flex flex-col gap-4 py-10 text-sm text-fg-subtle sm:flex-row sm:items-center sm:justify-between">
+    <p>
+      © {year} {site.name}
+    </p>
+    <p class="max-w-sm">{t('footer.built')}</p>
+    <div class="flex items-center gap-5">
+      <a href={site.repo} class="transition-colors hover:text-fg" rel="noopener" target="_blank">
+        {t('footer.source')} ↗
+      </a>
+      <a href="#main" class="transition-colors hover:text-fg">
+        {t('footer.top')} ↑
+      </a>
+    </div>
+  </div>
+</footer>
