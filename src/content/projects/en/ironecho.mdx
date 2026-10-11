@@ -1,0 +1,36 @@
+---
+title: IronEcho
+tagline: Offline-first, self-hosted fitness platform
+summary: A fitness tracker that keeps working in a basement gym with no signal — local-first writes, a custom sync engine with conflict resolution, and a one-command self-hosted backend.
+order: 3
+role: Backend & sync engine
+stack: [Node.js, TypeScript, Express, MongoDB, Realm, Socket.io, Docker Compose, JWT]
+repo: https://github.com/utku-kucuk/IronEcho
+diagram: ironecho
+highlights:
+  - Custom synchronisation with server-side conflict resolution
+  - Offline-first client on Realm, queued writes replayed on reconnect
+  - JWT access + refresh token flow
+  - One-command Docker Compose deployment, down to a Raspberry Pi
+---
+
+## The problem
+
+Gyms are notoriously bad places for connectivity, and most fitness apps either stop working offline or quietly sell your health data. IronEcho had to be **usable with zero signal** and **owned entirely by its user**.
+
+## What I built
+
+I designed the backend and the synchronisation engine.
+
+- **Local-first.** The mobile client writes to Realm instantly; every change is recorded and queued.
+- **Sync & conflict resolution.** When connectivity returns, queued operations are replayed against the API. The server validates each change and resolves conflicts with a last-write-wins strategy guarded by server-side rules, so data stays consistent across devices.
+- **Real-time updates.** Socket.io pushes changes to other connected sessions.
+- **Security.** Stateless JWTs with separate access and refresh tokens, Helmet, rate limiting and Joi validation on every input.
+
+## Running it
+
+MongoDB data models cover workouts, sets, body metrics and analytics. The whole backend ships as a **Docker Compose** stack — a single command brings it up on a VPS or on a Raspberry Pi in a home lab.
+
+## What I'd improve
+
+Replace last-write-wins with field-level merges (or CRDTs) for richer concurrent edits, and add end-to-end tests that simulate flaky networks.

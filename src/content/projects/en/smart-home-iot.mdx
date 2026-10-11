@@ -1,0 +1,33 @@
+---
+title: Smart Home IoT Suite
+tagline: ESP32 devices wired into a self-hosted Home Assistant
+summary: A family of ESP32 devices — a motorised smart blind, a smart lamp and climate sensors — talking MQTT to a self-hosted Home Assistant server running in Docker on Linux.
+order: 4
+role: Hardware, firmware & home server
+stack: [ESP32, ESPHome, C/C++, MQTT, Home Assistant, Docker, Linux]
+repo: https://github.com/utku-kucuk/SmartBlind-ESP32
+diagram: smarthome
+highlights:
+  - NEMA17 stepper blind with limit switches and physical controls
+  - MQTT messaging between devices and the home server
+  - Climate sensors reporting to Home Assistant on a schedule
+  - Self-hosted Home Assistant in Docker on Linux
+---
+
+## The idea
+
+I wanted my home automation to be **local, private and hackable** — no vendor cloud, no subscription, and hardware I understand down to the GPIO pin.
+
+## What I built
+
+- **Smart blind.** An ESP32 drives a NEMA17 stepper motor through an A4988 driver at 1/8 microstepping. Upper and lower limit switches stop the motor safely, physical buttons give manual open / close / stop, and the firmware adds cooling pauses on long runs to protect the motor.
+- **Smart lamp.** An LED lamp with touchscreen control, colour effects and MQTT integration.
+- **Climate sensors.** DHT22-based monitors for room temperature and humidity — including one inside 3D-printer filament boxes running on a LiPo battery.
+
+## How it fits together
+
+Every device is configured with ESPHome (with custom C/C++ where needed) and talks to the home server over **MQTT**. Home Assistant runs in **Docker on a Linux box**, exposing each device as entities for dashboards and automations.
+
+## Why it's here
+
+It's the same discipline as backend work at a smaller scale: message-driven integration, failure modes you have to design for, and a server you operate yourself.
