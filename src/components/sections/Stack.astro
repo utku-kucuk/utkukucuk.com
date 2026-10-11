@@ -1,0 +1,95 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { stack, type Tech } from '@/data/stack';
+import { getLocale, useTranslations } from '@/i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+// Two marquee rows built from all technologies that have a logo
+const withIcons = stack.flatMap((g) => g.items).filter((i): i is Required<Tech> => !!i.icon);
+const half = Math.ceil(withIcons.length / 2);
+const rows = [withIcons.slice(0, half), withIcons.slice(half)];
+---
+
+<section id="stack" class="relative overflow-hidden py-28 md:py-40">
+  <div class="container-site">
+    <SectionHeading
+      index="04"
+      eyebrow={t('stack.eyebrow')}
+      title={t('stack.title')}
+      subtitle={t('stack.subtitle')}
+    />
+  </div>
+
+  <div aria-hidden="true" class="marquee-mask space-y-4">
+    {rows.map((row, r) => (
+      <div class="marquee flex w-max gap-4" data-direction={r % 2 ? 'reverse' : 'forward'}>
+        {[...row, ...row].map((tech) => (
+          <span class="group flex items-center gap-3 rounded-2xl border border-line bg-bg-elevated/60 px-5 py-3.5 whitespace-nowrap">
+            <svg
+              viewBox="0 0 24 24"
+              class="size-5 fill-fg-subtle transition-colors duration-300 group-hover:fill-[var(--brand)]"
+              style={`--brand:#${tech.icon.hex}`}
+            >
+              <path d={tech.icon.path} />
+            </svg>
+            <span class="text-sm font-medium">{tech.name}</span>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <div class="container-site mt-20">
+    <div class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      {stack.map((group) => (
+        <div data-reveal class="bg-bg p-6">
+          <h3 class="eyebrow mb-4">{group.title[locale]}</h3>
+          <ul class="flex flex-wrap gap-2">
+            {group.items.map((item) => (
+              <li class="flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-sm">
+                {item.icon && (
+                  <svg viewBox="0 0 24 24" class="size-3.5 fill-fg-muted" aria-hidden="true">
+                    <path d={item.icon.path} />
+                  </svg>
+                )}
+                {item.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee-mask {
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .marquee {
+    animation: marquee 48s linear infinite;
+  }
+
+  .marquee[data-direction='reverse'] {
+    animation-direction: reverse;
+  }
+
+  .marquee-mask:hover .marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      animation: none;
+    }
+  }
+</style>
