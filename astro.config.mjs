@@ -20,5 +20,9 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // three.js is lazy-loaded on idle for the hero scene (~130 kB gzipped)
+      chunkSizeWarningLimit: 600,
+    },
   },
 });
