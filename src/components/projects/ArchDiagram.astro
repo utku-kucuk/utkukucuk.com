@@ -1,0 +1,157 @@
+---
+import { diagrams, type DiagramNode } from '@/data/diagrams';
+
+interface Props {
+  name: string;
+  title: string;
+  class?: string;
+}
+
+const { name, title, class: className } = Astro.props;
+const diagram = diagrams[name];
+if (!diagram) throw new Error(`Unknown diagram: ${name}`);
+
+const H = 44;
+const byId = new Map(diagram.nodes.map((n) => [n.id, n]));
+const center = (n: DiagramNode) => ({ x: n.x + (n.w ?? 96) / 2, y: n.y + H / 2 });
+
+/** Point where the segment from the box centre towards (tx, ty) leaves the box. */
+function exitPoint(n: DiagramNode, tx: number, ty: number) {
+  const c = center(n);
+  const dx = tx - c.x;
+  const dy = ty - c.y;
+  const hw = (n.w ?? 96) / 2 + 3;
+  const hh = H / 2 + 3;
+  const scale = 1 / Math.max(Math.abs(dx) / hw, Math.abs(dy) / hh);
+  return { x: c.x + dx * scale, y: c.y + dy * scale };
+}
+
+const edges = diagram.edges.map((e, i) => {
+  const a = byId.get(e.from)!;
+  const b = byId.get(e.to)!;
+  const ca = center(a);
+  const cb = center(b);
+  const p1 = exitPoint(a, cb.x, cb.y);
+  const p2 = exitPoint(b, ca.x, ca.y);
+  return {
+    ...e,
+    d: `M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`,
+    mid: { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 },
+    delay: (i * 0.45).toFixed(2),
+  };
+});
+---
+
+<svg
+  viewBox="0 0 400 240"
+  role="img"
+  aria-label={title}
+  class:list={['arch-diagram w-full', className]}
+  data-arch
+>
+  <defs>
+    <marker
+      id={`arrow-${name}`}
+      viewBox="0 0 8 8"
+      refX="7"
+      refY="4"
+      markerWidth="6"
+      markerHeight="6"
+      orient="auto"
+    >
+      <path d="M0 0 L8 4 L0 8 z" class="fill-fg-subtle"></path>
+    </marker>
+  </defs>
+
+  {diagram.group && (
+    <g>
+      <rect
+        x={diagram.group.x}
+        y={diagram.group.y}
+        width={diagram.group.w}
+        height={diagram.group.h}
+        rx="14"
+        class="fill-none stroke-line"
+        stroke-dasharray="4 5"
+      />
+      <text
+        x={diagram.group.x + 12}
+        y={diagram.group.y + diagram.group.h - 9}
+        class="fill-fg-subtle font-mono text-[8px]"
+      >
+        {diagram.group.label}
+      </text>
+    </g>
+  )}
+
+  {edges.map((e) => (
+    <g>
+      <path
+        d={e.d}
+        class="stroke-fg-subtle/60 fill-none"
+        stroke-width="1"
+        marker-end={`url(#arrow-${name})`}
+      />
+      {e.label && (
+        <text
+          x={e.mid.x}
+          y={e.mid.y - 5}
+          text-anchor="middle"
+          class="fill-fg-subtle font-mono text-[7.5px]"
+        >
+          {e.label}
+        </text>
+      )}
+      <circle r="2.6" class="packet fill-accent-2">
+        <animateMotion dur="2.4s" begin={`${e.delay}s`} repeatCount="indefinite" path={e.d} />
+      </circle>
+    </g>
+  ))}
+
+  {diagram.nodes.map((n) => (
+    <g>
+      <rect
+        x={n.x}
+        y={n.y}
+        width={n.w ?? 96}
+        height={H}
+        rx="10"
+        class:list={[
+          'stroke-[1]',
+          n.kind === 'data' && 'fill-bg-elevated stroke-accent-2/60',
+          n.kind === 'edge' && 'fill-bg-elevated stroke-accent/70',
+          n.kind === 'client' && 'fill-bg stroke-line',
+          (!n.kind || n.kind === 'service') && 'fill-bg-elevated stroke-fg-subtle/50',
+        ]}
+      />
+      <text
+        x={n.x + (n.w ?? 96) / 2}
+        y={n.y + 19}
+        text-anchor="middle"
+        class="fill-fg text-[10px] font-medium"
+      >
+        {n.label}
+      </text>
+      {n.sub && (
+        <text
+          x={n.x + (n.w ?? 96) / 2}
+          y={n.y + 32}
+          text-anchor="middle"
+          class="fill-fg-subtle font-mono text-[7.5px]"
+        >
+          {n.sub}
+        </text>
+      )}
+    </g>
+  ))}
+</svg>
+
+<script>
+  // SMIL ignores CSS media queries, so pause the packets explicitly for reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<SVGSVGElement>('[data-arch]').forEach((svg) => {
+      svg.pauseAnimations();
+      svg.querySelectorAll('.packet').forEach((p) => p.remove());
+    });
+  }
+</script>
