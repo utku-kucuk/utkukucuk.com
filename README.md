@@ -24,7 +24,7 @@ Source code for the personal portfolio of **Muhammet Utku Küçük**, Backend So
 | Motion    | GSAP (ScrollTrigger, SplitText), Lenis, raw WebGL          |
 | Content   | MDX content collections                                    |
 | Quality   | ESLint, Prettier, `astro check`, Lighthouse CI, Dependabot |
-| Hosting   | Cloudflare Pages                                           |
+| Hosting   | Cloudflare Workers (static assets)                         |
 
 ## Project structure
 
@@ -77,13 +77,14 @@ pnpm dev               # http://localhost:4321
 
 ## Deployment
 
-Cloudflare Pages builds every push: `main` → production, pull requests → preview URLs.
+Hosted on **Cloudflare Workers (static assets)** with Workers Builds connected to this repository. `wrangler.jsonc` serves `dist/` directly — no Worker script — and `_headers` / `_redirects` are applied at the edge.
 
-| Setting          | Value                                                |
-| ---------------- | ---------------------------------------------------- |
-| Build command    | `pnpm build`                                         |
-| Output directory | `dist`                                               |
-| Environment      | `NODE_VERSION=24`, `PUBLIC_WEB3FORMS_KEY` (optional) |
+| Setting                      | Value                                               |
+| ---------------------------- | --------------------------------------------------- |
+| Build command                | `pnpm build`                                        |
+| Deploy command (`main`)      | `npx wrangler deploy`                               |
+| Non-production branch deploy | `npx wrangler versions upload` (preview URL per PR) |
+| Build variables              | `PUBLIC_WEB3FORMS_KEY` (optional, contact form)     |
 
 ## Contributing
 

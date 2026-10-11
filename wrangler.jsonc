@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Must match the Worker name in the Cloudflare dashboard
+  "name": "utkukucuk-com",
+  "compatibility_date": "2026-10-01",
+  // Static site: serve the Astro build output, no Worker script needed.
+  // _headers and _redirects in dist/ are applied by Workers static assets.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+  },
+}

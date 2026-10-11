@@ -28,4 +28,4 @@ fix(nav): close mobile menu on route change
 
 - Every change lands through a PR; PRs are **squash-merged**, so the PR title becomes the commit on `main` and must follow Conventional Commits.
 - CI (lint, format, type-check, build, Lighthouse) must pass.
-- Each PR gets a Cloudflare Pages preview deployment.
+- Each PR gets a Cloudflare preview deployment.
