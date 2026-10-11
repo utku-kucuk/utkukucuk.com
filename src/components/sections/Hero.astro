@@ -1,0 +1,43 @@
+---
+import { site } from '@/data/site';
+import { getLocale, useTranslations } from '@/i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+<section id="top" class="relative flex min-h-dvh items-center overflow-hidden pt-16">
+  <div class="container-site relative z-10">
+    <p class="mb-8 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-xs text-fg-muted">
+      <span class="relative flex size-2">
+        <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent-2 opacity-60"></span>
+        <span class="relative inline-flex size-2 rounded-full bg-accent-2"></span>
+      </span>
+      {t('hero.available')}
+    </p>
+    <p class="eyebrow mb-4">{t('hero.greeting')}</p>
+    <h1 class="text-[clamp(3rem,11vw,9rem)] leading-[0.9] font-semibold tracking-[-0.04em]">
+      Utku
+      <br />
+      <span class="text-gradient">Küçük</span>
+    </h1>
+    <p class="mt-8 font-mono text-sm text-accent">
+      {t('hero.role')} · {site.location[locale]}
+    </p>
+    <p class="mt-4 max-w-xl text-lg text-pretty text-fg-muted">{t('hero.tagline')}</p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a
+        href="#work"
+        class="rounded-full bg-fg px-6 py-3 text-sm font-medium text-bg transition-transform hover:-translate-y-0.5"
+      >
+        {t('hero.cta.work')}
+      </a>
+      <a
+        href="#contact"
+        class="rounded-full border border-line px-6 py-3 text-sm font-medium transition-colors hover:border-fg-subtle"
+      >
+        {t('hero.cta.contact')}
+      </a>
+    </div>
+  </div>
+</section>
