@@ -51,6 +51,11 @@ const alternates = (Object.keys(languages) as Locale[]).map((l) => ({
           /* storage unavailable */
         }
         document.documentElement.dataset.theme = theme;
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('js-anim');
+          // fail-safe: never keep content hidden if scripts fail to load
+          setTimeout(() => document.documentElement.classList.remove('js-anim'), 3000);
+        }
       })();
     </script>
     <slot name="head" />

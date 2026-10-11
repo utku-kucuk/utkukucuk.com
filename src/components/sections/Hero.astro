@@ -6,38 +6,198 @@ const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 ---
 
-<section id="top" class="relative flex min-h-dvh items-center overflow-hidden pt-16">
+<section id="top" data-hero class="relative flex min-h-dvh items-center overflow-hidden pt-16">
+  <!-- Static glow: visible immediately and the fallback when WebGL is unavailable -->
+  <div aria-hidden="true" class="hero-glow pointer-events-none absolute inset-0"></div>
+  <canvas
+    data-hero-canvas
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 size-full opacity-0 transition-opacity duration-[1.5s] data-[ready]:opacity-100"
+  ></canvas>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-transparent to-bg"
+  ></div>
+
   <div class="container-site relative z-10">
-    <p class="mb-8 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-xs text-fg-muted">
+    <p
+      data-hero-reveal
+      class="mb-8 inline-flex items-center gap-2 rounded-full border border-line bg-bg/40 px-3 py-1 font-mono text-xs text-fg-muted backdrop-blur"
+    >
       <span class="relative flex size-2">
         <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent-2 opacity-60"></span>
         <span class="relative inline-flex size-2 rounded-full bg-accent-2"></span>
       </span>
       {t('hero.available')}
     </p>
-    <p class="eyebrow mb-4">{t('hero.greeting')}</p>
-    <h1 class="text-[clamp(3rem,11vw,9rem)] leading-[0.9] font-semibold tracking-[-0.04em]">
-      Utku
-      <br />
-      <span class="text-gradient">Küçük</span>
+    <p data-hero-reveal class="eyebrow mb-4">
+      {t('hero.greeting')}
+    </p>
+    <h1
+      data-hero-title
+      class="text-[clamp(3.5rem,13vw,9.5rem)] leading-[0.88] font-semibold tracking-[-0.045em]"
+    >
+      <span data-split class="block">
+        Utku
+      </span>
+      <span class="block overflow-hidden pb-[0.08em]">
+        <span data-rise class="text-gradient inline-block">
+          Küçük
+        </span>
+      </span>
     </h1>
-    <p class="mt-8 font-mono text-sm text-accent">
+    <p data-hero-reveal class="mt-8 font-mono text-sm text-accent">
       {t('hero.role')} · {site.location[locale]}
     </p>
-    <p class="mt-4 max-w-xl text-lg text-pretty text-fg-muted">{t('hero.tagline')}</p>
-    <div class="mt-10 flex flex-wrap gap-3">
+    <p data-hero-reveal class="mt-4 max-w-xl text-lg text-pretty text-fg-muted">
+      {t('hero.tagline')}
+    </p>
+    <div data-hero-reveal class="mt-10 flex flex-wrap gap-3">
       <a
         href="#work"
-        class="rounded-full bg-fg px-6 py-3 text-sm font-medium text-bg transition-transform hover:-translate-y-0.5"
+        data-magnetic="0.25"
+        class="group inline-flex items-center gap-2 rounded-full bg-fg px-6 py-3 text-sm font-medium text-bg"
       >
         {t('hero.cta.work')}
+        <span aria-hidden="true" class="transition-transform group-hover:translate-y-0.5">
+          ↓
+        </span>
       </a>
       <a
         href="#contact"
-        class="rounded-full border border-line px-6 py-3 text-sm font-medium transition-colors hover:border-fg-subtle"
+        data-magnetic="0.25"
+        class="rounded-full border border-line bg-bg/40 px-6 py-3 text-sm font-medium backdrop-blur transition-colors hover:border-fg-subtle"
       >
         {t('hero.cta.contact')}
       </a>
     </div>
   </div>
+
+  <a
+    href="#about"
+    data-hero-reveal
+    class="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 text-fg-subtle transition-colors hover:text-fg sm:flex"
+  >
+    <span class="font-mono text-[0.65rem] tracking-[0.3em] uppercase">{t('hero.scroll')}</span>
+    <span class="scroll-line relative h-12 w-px overflow-hidden bg-line"></span>
+  </a>
 </section>
+
+<style>
+  .hero-glow {
+    background:
+      radial-gradient(40rem 30rem at 75% 40%, var(--glow), transparent 70%),
+      radial-gradient(
+        30rem 24rem at 15% 80%,
+        color-mix(in srgb, var(--accent-2) 10%, transparent),
+        transparent 70%
+      );
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--fg);
+    animation: scroll-line 2.2s var(--ease-out-expo) infinite;
+  }
+
+  @keyframes scroll-line {
+    0% {
+      transform: translateY(-100%);
+    }
+    60%,
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  :global(.js-anim) [data-hero-reveal],
+  :global(.js-anim) [data-hero-title] {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  import {
+    gsap,
+    initMagnetic,
+    prefersReducedMotion,
+    revealAll,
+    ScrollTrigger,
+    SplitText,
+  } from '@/scripts/motion';
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
+  const reduced = prefersReducedMotion();
+
+  // ----- Intro -----
+  function intro() {
+    const title = document.querySelector<HTMLElement>('[data-hero-title]');
+    if (!title || reduced) return revealAll();
+
+    // Gradient text can't be split per character (background-clip is per element),
+    // so the first name animates per char and the surname rises as one word.
+    const split = SplitText.create(title.querySelector('[data-split]'), {
+      type: 'chars',
+      mask: 'chars',
+    });
+    revealAll();
+    gsap
+      .timeline({ defaults: { ease: 'expo.out' } })
+      .from(split.chars, { yPercent: 110, duration: 1.3, stagger: 0.04 })
+      .from(title.querySelector('[data-rise]'), { yPercent: 110, duration: 1.4 }, 0.2)
+      .from(
+        '[data-hero-reveal]',
+        { opacity: 0, y: 24, duration: 1, stagger: 0.08, clearProps: 'transform' },
+        0.35,
+      );
+  }
+
+  // ----- WebGL scene (lazy) -----
+  function supportsWebGL() {
+    try {
+      const c = document.createElement('canvas');
+      return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  }
+
+  async function loadScene() {
+    if (!canvas || !hero || !supportsWebGL()) return;
+    const { initHeroScene } = await import('@/scripts/hero-scene');
+    const scene = initHeroScene(canvas, { reducedMotion: reduced });
+    if (!reduced) {
+      ScrollTrigger.create({
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => scene.setScrollProgress(self.progress),
+      });
+      gsap.fromTo(
+        canvas,
+        { opacity: 1 },
+        {
+          opacity: 0.1,
+          ease: 'none',
+          immediateRender: false,
+          scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+        },
+      );
+      gsap.to('[data-hero] .container-site', {
+        yPercent: -18,
+        opacity: 0.2,
+        ease: 'none',
+        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+      });
+    }
+  }
+
+  intro();
+  initMagnetic(hero ?? document);
+  const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
+  idle(() => void loadScene());
+</script>
