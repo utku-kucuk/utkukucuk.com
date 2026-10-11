@@ -1,0 +1,14 @@
+name: Improvement
+description: Suggest a new section, content change or enhancement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposal
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Motivation

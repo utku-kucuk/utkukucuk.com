@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # local source material (not published)
 aboutme.md
+
+# Claude Code local settings
+.claude/settings.local.json
