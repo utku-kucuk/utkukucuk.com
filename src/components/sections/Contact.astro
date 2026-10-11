@@ -1,0 +1,249 @@
+---
+import { siGithub } from 'simple-icons';
+
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { site } from '@/data/site';
+import { getLocale, useTranslations } from '@/i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+
+// LinkedIn is not in simple-icons (brand request), so it uses a local glyph
+const linkedinPath =
+  'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z';
+
+const socials = [
+  { label: 'GitHub', href: site.socials.github, handle: 'utku-kucuk', path: siGithub.path },
+  { label: 'LinkedIn', href: site.socials.linkedin, handle: 'in/utkukucuk', path: linkedinPath },
+];
+---
+
+<section id="contact" class="relative overflow-hidden py-28 md:py-40">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-[radial-gradient(60%_60%_at_50%_100%,var(--glow),transparent)]"
+  ></div>
+
+  <div class="container-site relative">
+    <SectionHeading
+      index="05"
+      eyebrow={t('contact.eyebrow')}
+      title={t('contact.title')}
+      subtitle={t('contact.subtitle')}
+    />
+
+    <div class="grid gap-14 lg:grid-cols-12 lg:gap-10">
+      <div class:list={[formKey ? 'lg:col-span-6' : 'lg:col-span-8']}>
+        <div data-reveal class="flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            data-magnetic="0.15"
+            class="text-[clamp(1.6rem,4.2vw,2.75rem)] font-semibold tracking-tight underline decoration-line decoration-2 underline-offset-8 transition-colors hover:decoration-accent"
+          >
+            {site.email}
+          </a>
+          <button
+            type="button"
+            data-copy={site.email}
+            data-copied-label={t('contact.copied')}
+            class="rounded-full border border-line px-3.5 py-1.5 font-mono text-xs text-fg-muted transition-colors hover:border-fg-subtle hover:text-fg"
+          >
+            <span data-copy-label>{t('contact.copy')}</span>
+          </button>
+        </div>
+
+        <div data-reveal class="mt-12">
+          <p class="eyebrow mb-4">{t('contact.cv')}</p>
+          <div class="flex flex-wrap gap-3">
+            {(['en', 'tr'] as const).map((l) => (
+              <a
+                href={site.cv[l]}
+                download
+                data-magnetic="0.2"
+                class:list={[
+                  'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors',
+                  l === locale ? 'bg-fg text-bg' : 'border border-line hover:border-fg-subtle',
+                ]}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                CV · {t(l === 'en' ? 'contact.cv.en' : 'contact.cv.tr')}
+                <span class="font-mono text-xs opacity-60">PDF</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div data-reveal class="mt-12">
+          <p class="eyebrow mb-4">{t('contact.elsewhere')}</p>
+          <ul class="divide-y divide-line border-y border-line">
+            {socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener me"
+                  class="group flex items-center justify-between gap-4 py-4"
+                >
+                  <span class="flex items-center gap-3">
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="size-5 fill-fg-muted transition-colors group-hover:fill-accent"
+                      aria-hidden="true"
+                    >
+                      <path d={s.path} />
+                    </svg>
+                    <span class="font-medium">{s.label}</span>
+                  </span>
+                  <span class="flex items-center gap-3 font-mono text-sm text-fg-subtle transition-colors group-hover:text-fg">
+                    {s.handle}
+                    <span
+                      aria-hidden="true"
+                      class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    >
+                      ↗
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {formKey && (
+        <form
+          data-reveal
+          data-contact-form
+          data-success={t('contact.form.success')}
+          data-error={t('contact.form.error')}
+          data-sending={t('contact.form.sending')}
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          class="rounded-3xl border border-line bg-bg-elevated/70 p-6 backdrop-blur-sm sm:p-8 lg:col-span-6"
+        >
+          <h3 class="mb-6 text-lg font-semibold">{t('contact.form.title')}</h3>
+          <input type="hidden" name="access_key" value={formKey} />
+          <input type="hidden" name="subject" value="New message from utkukucuk.com" />
+          <input type="hidden" name="from_name" value="utkukucuk.com" />
+          {/* honeypot: real users never see or fill this */}
+          <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="field">
+              <span>{t('contact.form.name')}</span>
+              <input type="text" name="name" required autocomplete="name" maxlength="100" />
+            </label>
+            <label class="field">
+              <span>{t('contact.form.email')}</span>
+              <input type="email" name="email" required autocomplete="email" maxlength="200" />
+            </label>
+            <label class="field sm:col-span-2">
+              <span>{t('contact.form.message')}</span>
+              <textarea name="message" required rows="5" maxlength="5000" />
+            </label>
+          </div>
+
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p data-form-status role="status" aria-live="polite" class="text-sm text-fg-muted" />
+            <button
+              type="submit"
+              data-magnetic="0.2"
+              class="rounded-full bg-fg px-6 py-3 text-sm font-medium text-bg transition-opacity disabled:opacity-50"
+            >
+              {t('contact.form.send')}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .field {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .field > span {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+  .field :is(input, textarea) {
+    width: 100%;
+    border-radius: 0.875rem;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    padding: 0.75rem 1rem;
+    color: var(--fg);
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .field :is(input, textarea):focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+</style>
+
+<script>
+  // Copy email
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>('[data-copy-label]');
+    const original = label?.textContent ?? '';
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        if (label) label.textContent = btn.dataset.copiedLabel ?? original;
+        setTimeout(() => label && (label.textContent = original), 2000);
+      } catch {
+        window.location.href = `mailto:${btn.dataset.copy}`;
+      }
+    });
+  });
+
+  // Progressive enhancement: submit via fetch, fall back to a normal POST without JS
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!status || !submit) return;
+      submit.disabled = true;
+      status.textContent = form.dataset.sending ?? '';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const json = (await res.json()) as { success?: boolean };
+        if (!res.ok || !json.success) throw new Error('send failed');
+        status.textContent = form.dataset.success ?? '';
+        status.style.color = 'var(--accent-2)';
+        form.reset();
+      } catch {
+        status.textContent = form.dataset.error ?? '';
+        status.style.color = '#f87171';
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  });
+</script>
