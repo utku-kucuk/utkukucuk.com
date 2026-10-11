@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — Not found · Utku Küçük" description="This route does not exist.">
+  <section class="relative flex min-h-dvh items-center overflow-hidden pt-16">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(40rem_30rem_at_70%_40%,var(--glow),transparent_70%)]"
+    ></div>
+    <div class="container-site relative">
+      <p class="eyebrow mb-6">HTTP 404</p>
+      <h1 class="text-[clamp(5rem,22vw,16rem)] leading-[0.8] font-semibold tracking-[-0.06em]">
+        <span class="text-gradient">404</span>
+      </h1>
+
+      <pre class="mt-10 max-w-xl overflow-x-auto rounded-2xl border border-line bg-bg-elevated/70 p-5 font-mono text-sm leading-relaxed text-fg-muted"><span class="text-accent">GET</span> <span data-path>/unknown</span>
+<span class="text-fg-subtle">→ 404 Not Found · route not registered</span>
+<span class="text-fg-subtle">→ 404 Bulunamadı · böyle bir sayfa yok</span></pre>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/" class="rounded-full bg-fg px-6 py-3 text-sm font-medium text-bg">
+          Back home
+        </a>
+        <a
+          href="/tr/"
+          lang="tr"
+          class="rounded-full border border-line px-6 py-3 text-sm font-medium transition-colors hover:border-fg-subtle"
+        >
+          Ana sayfaya dön
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const el = document.querySelector('[data-path]');
+  if (el) el.textContent = window.location.pathname;
+</script>
