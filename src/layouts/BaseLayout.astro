@@ -1,0 +1,71 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '@/styles/global.css';
+
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { languages, type Locale } from '@/i18n/ui';
+import { getLocale, switchLocalePath, useTranslations } from '@/i18n/utils';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const { title = t('meta.title'), description = t('meta.description') } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternates = (Object.keys(languages) as Locale[]).map((l) => ({
+  locale: l,
+  href: new URL(switchLocalePath(Astro.url, l), Astro.site).href,
+}));
+---
+
+<!doctype html>
+<html lang={locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.locale} href={a.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={alternates[0]?.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#07080b" />
+    <meta name="generator" content={Astro.generator} />
+
+    <script is:inline>
+      (() => {
+        let theme = 'dark';
+        try {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark') theme = stored;
+          else if (matchMedia('(prefers-color-scheme: light)').matches) theme = 'light';
+        } catch {
+          /* storage unavailable */
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only z-50 rounded-md bg-accent px-4 py-2 text-accent-contrast focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+    >
+      {t('nav.skip')}
+    </a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
