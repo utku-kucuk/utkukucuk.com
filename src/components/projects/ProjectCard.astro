@@ -15,8 +15,6 @@ const { project, index, total, locale } = Astro.props;
 const t = useTranslations(locale);
 const { data } = project;
 const href = localizePath(`/projects/${project.slug}/`, locale);
-// The arrow opens the live demo when there is one, otherwise the repository
-const external = data.live ?? data.repo;
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
@@ -49,16 +47,31 @@ const pad = (n: number) => String(n).padStart(2, '0');
       </h3>
       <p class="mt-1.5 text-fg-muted">{data.tagline}</p>
     </div>
-    <a
-      href={external}
-      target="_blank"
-      rel="noopener"
-      aria-label={`${data.title}: ${t(data.live ? 'work.live' : 'work.repo')}`}
-      title={t(data.live ? 'work.live' : 'work.repo')}
-      class="relative z-10 grid size-11 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 group-hover:rotate-[-45deg] group-hover:border-accent group-hover:bg-accent group-hover:text-accent-contrast hover:scale-110"
-    >
-      <span aria-hidden="true">→</span>
-    </a>
+    <div class="flex shrink-0 items-center gap-2">
+      {data.live && (
+        <a
+          href={data.live}
+          target="_blank"
+          rel="noopener"
+          aria-label={`${data.title}: ${t('work.live')}`}
+          title={t('work.live')}
+          class="relative z-10 inline-flex h-11 items-center gap-2 rounded-full border border-line px-4 font-mono text-xs transition-colors hover:border-status hover:text-status"
+        >
+          <span class="relative flex size-2" aria-hidden="true">
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-status opacity-60"></span>
+            <span class="relative inline-flex size-2 rounded-full bg-status"></span>
+          </span>
+          {t('work.liveLabel')}
+        </a>
+      )}
+      <!-- Decorative: the title link's overlay makes the whole card open the case study -->
+      <span
+        aria-hidden="true"
+        class="grid size-11 place-items-center rounded-full border border-line text-lg transition-all duration-500 group-hover:rotate-[-45deg] group-hover:border-accent group-hover:bg-accent group-hover:text-accent-contrast"
+      >
+        →
+      </span>
+    </div>
   </header>
 
   <div class="relative my-6 rounded-2xl border border-line bg-bg/60 p-3 sm:p-4">
