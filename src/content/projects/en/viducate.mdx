@@ -1,35 +1,36 @@
 ---
 title: Viducate
-tagline: Video learning platform with an HLS streaming pipeline
-summary: An online education platform where teachers upload multi-GB lectures and students stream them adaptively — with chunked uploads, FFmpeg transcoding and three-role RBAC.
+tagline: Video learning platform with enterprise sign-in
+summary: An online education platform for structured video courses, quizzes and progress tracking — large video uploads, byte-range streaming, FFmpeg processing and JWT + LDAP authentication with three roles.
 order: 1
-role: Backend & video pipeline
+role: Backend & video delivery
 stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
 repo: https://github.com/utku-kucuk/viducate
 diagram: viducate
 highlights:
-  - Chunked, resumable uploads for multi-GB lecture videos
-  - FFmpeg transcoding to HLS adaptive streams
-  - JWT + LDAP auth with Admin / Teacher / Student roles
-  - Deployed on Linux with Docker behind Nginx
+  - Large lecture uploads with byte-range streaming for smooth playback
+  - JWT + LDAP / Active Directory sign-in with just-in-time provisioning
+  - Admin / Teacher / Student roles, quizzes and progress tracking
+  - Deployed on Linux behind Nginx, with Docker and PM2 setups
 ---
 
 ## The problem
 
-Lecture videos are large — often several gigabytes — and teachers upload them over ordinary connections. A single failed request shouldn't throw away an hour of uploading, and students on slow networks still need smooth playback.
+Lecture videos are large — often several gigabytes — and institutions want their staff to sign in with the accounts they already have. The platform had to accept big uploads reliably, play them back smoothly on ordinary connections and fit into a corporate directory.
 
 ## What I built
 
-I designed the backend and the **video pipeline** of Viducate, a platform for structured video courses, quizzes and progress tracking.
+I designed the backend and the **video delivery** of Viducate, a platform for structured video courses, quizzes and progress tracking.
 
-- **Chunked, resumable uploads.** Files are sent in chunks that the server reassembles, so an interrupted upload resumes from the last chunk instead of starting over.
-- **Transcoding to HLS.** After upload, FFmpeg transcodes the source into HLS renditions, letting the player adapt quality to each student's bandwidth. Metadata such as duration and thumbnails is extracted in the same step and stored in PostgreSQL.
-- **Access control.** JWT authentication with three roles — **Admin**, **Teacher** and **Student** — plus LDAP/Active Directory login for institutional deployments and rate limiting on sensitive routes.
+- **Uploads & processing.** Teachers upload lectures through a validated upload endpoint with configurable size limits; Nginx is tuned for multi-GB request bodies. FFmpeg generates thumbnails and reads durations, stored with the rest of the metadata in PostgreSQL.
+- **Streaming that doesn't freeze.** Videos are served with HTTP **byte-range** support (`Accept-Ranges`), so players can seek and buffer large files instead of downloading them whole.
+- **Enterprise sign-in.** JWT authentication with three roles — **Admin**, **Teacher** and **Student** — plus **LDAP / Active Directory** login: local accounts are checked first, then the directory, and first-time corporate users are created just in time.
+- **Running a school.** Admins bulk-import users from CSV with emailed credentials; students take quizzes and track progress per video.
 
 ## Running it
 
-The platform runs on Linux in Docker, with **Nginx** as reverse proxy terminating TLS and serving the stream segments efficiently, while the Express API handles business logic.
+The API sits behind **Nginx** as a TLS-terminating reverse proxy on Linux, with Helmet, rate limiting and request validation in front of every route. Deployment templates cover both Docker and PM2.
 
 ## What I'd improve
 
-Move transcoding to a queue-backed worker pool so uploads never wait on CPU-heavy jobs, and push HLS segments to object storage with a CDN in front.
+Transcode uploads to HLS renditions on a queue-backed worker pool for adaptive bitrate, move video files to object storage behind a CDN, and resume interrupted uploads with chunking.

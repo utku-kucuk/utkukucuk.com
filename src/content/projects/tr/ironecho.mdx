@@ -8,7 +8,7 @@ stack: [Node.js, TypeScript, Express, MongoDB, Realm, Socket.io, Docker Compose,
 repo: https://github.com/utku-kucuk/IronEcho
 diagram: ironecho
 highlights:
-  - Sunucu taraflı çakışma çözümlemeli özel senkronizasyon
+  - Zaman damgasına dayalı çakışma çözümlemeli özel senkronizasyon motoru
   - Realm üzerinde offline-first istemci, bağlantı gelince kuyruktaki yazmalar tekrar oynatılıyor
   - JWT access + refresh token akışı
   - Raspberry Pi'ye kadar tek komutla Docker Compose kurulumu
@@ -23,7 +23,7 @@ Spor salonları bağlantı açısından kötü yerlerdir; çoğu fitness uygulam
 Backend'i ve senkronizasyon motorunu tasarladım.
 
 - **Local-first.** Mobil istemci anında Realm'e yazıyor; her değişiklik kaydedilip kuyruğa alınıyor.
-- **Senkronizasyon ve çakışma çözümleme.** Bağlantı geldiğinde kuyruktaki işlemler API'ye karşı tekrar oynatılıyor. Sunucu her değişikliği doğruluyor ve çakışmaları sunucu kurallarıyla korunan last-write-wins stratejisiyle çözüyor; veri cihazlar arasında tutarlı kalıyor.
+- **Senkronizasyon ve çakışma çözümleme.** Bağlantı geldiğinde kuyruktaki işlemler API'ye karşı tekrar oynatılıyor. API her değişikliği Joi ile doğruluyor; senkronizasyon motoru çakışmaları değişiklik zaman damgalarını karşılaştırarak last-write-wins yöntemiyle çözüyor, veri cihazlar arasında tutarlı kalıyor.
 - **Gerçek zamanlı güncellemeler.** Socket.io değişiklikleri bağlı diğer oturumlara iletiyor.
 - **Güvenlik.** Ayrı access ve refresh token'lı stateless JWT, Helmet, rate limiting ve her girdide Joi validation.
 
