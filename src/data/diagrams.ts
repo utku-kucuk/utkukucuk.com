@@ -53,7 +53,7 @@ export const diagrams: Record<string, Diagram> = {
   viducate: {
     group: { label: 'linux · docker', x: 116, y: 14, w: 274, h: 212 },
     nodes: [
-      { id: 'browser', label: 'Browser', sub: 'HLS player', x: 6, y: 98, w: 82, kind: 'client' },
+      { id: 'browser', label: 'Browser', sub: 'video player', x: 6, y: 98, w: 82, kind: 'client' },
       { id: 'nginx', label: 'Nginx', sub: 'TLS · proxy', x: 132, y: 98, w: 80, kind: 'edge' },
       {
         id: 'api',
@@ -64,15 +64,14 @@ export const diagrams: Record<string, Diagram> = {
         w: 100,
         kind: 'service',
       },
-      { id: 'ffmpeg', label: 'FFmpeg', sub: 'transcode', x: 232, y: 166, w: 100, kind: 'service' },
+      { id: 'ffmpeg', label: 'FFmpeg', sub: 'thumbnails', x: 232, y: 166, w: 100, kind: 'service' },
       { id: 'db', label: 'PostgreSQL', sub: 'metadata', x: 300, y: 98, w: 84, kind: 'data' },
     ],
     edges: [
-      { from: 'browser', to: 'nginx', label: 'chunks' },
+      { from: 'browser', to: 'nginx' },
       { from: 'nginx', to: 'api' },
       { from: 'api', to: 'ffmpeg' },
       { from: 'api', to: 'db' },
-      { from: 'ffmpeg', to: 'nginx', label: 'HLS' },
     ],
   },
   ironecho: {

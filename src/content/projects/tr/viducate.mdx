@@ -1,35 +1,36 @@
 ---
 title: Viducate
-tagline: HLS streaming pipeline'ına sahip video eğitim platformu
-summary: Öğretmenlerin çok GB'lık dersler yüklediği, öğrencilerin ise adaptif olarak izlediği bir online eğitim platformu — parçalı upload, FFmpeg transcoding ve üç rollü RBAC ile.
+tagline: Kurumsal giriş destekli video eğitim platformu
+summary: Yapılandırılmış video kursları, sınavlar ve ilerleme takibi için bir online eğitim platformu. Büyük video yüklemeleri, byte-range streaming, FFmpeg işleme ve üç rollü JWT + LDAP kimlik doğrulama içeriyor.
 order: 1
-role: Backend ve video pipeline
+role: Backend ve video dağıtımı
 stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
 repo: https://github.com/utku-kucuk/viducate
 diagram: viducate
 highlights:
-  - Çok GB'lık ders videoları için parçalı ve devam ettirilebilir upload
-  - FFmpeg ile HLS adaptive stream'e transcoding
-  - Admin / Teacher / Student rolleriyle JWT + LDAP kimlik doğrulama
-  - Linux üzerinde Docker ve Nginx arkasında yayında
+  - Büyük ders videolarının yüklenmesi ve akıcı oynatma için byte-range streaming
+  - Just-in-time hesap oluşturmalı JWT + LDAP / Active Directory girişi
+  - Admin / Teacher / Student rolleri, sınavlar ve ilerleme takibi
+  - Linux üzerinde Nginx arkasında; Docker ve PM2 kurulumlarıyla
 ---
 
 ## Problem
 
-Ders videoları büyük — çoğu zaman birkaç gigabayt — ve öğretmenler bunları sıradan bağlantılarla yüklüyor. Tek bir başarısız istek bir saatlik yüklemeyi boşa çıkarmamalı; yavaş ağdaki öğrenciler de akıcı bir oynatma deneyimi yaşamalı.
+Ders videoları büyük, çoğu zaman birkaç gigabayt. Kurumlar da çalışanlarının mevcut hesaplarıyla giriş yapmasını istiyor. Platformun büyük yüklemeleri güvenilir şekilde kabul etmesi, sıradan bağlantılarda akıcı oynatması ve kurumsal bir dizine entegre olması gerekiyordu.
 
 ## Ne geliştirdim
 
-Yapılandırılmış video kursları, quiz'ler ve ilerleme takibi sunan Viducate'in backend'ini ve **video pipeline'ını** tasarladım.
+Yapılandırılmış video kursları, sınavlar ve ilerleme takibi sunan Viducate'in backend'ini ve **video dağıtımını** tasarladım.
 
-- **Parçalı, devam ettirilebilir upload.** Dosyalar parçalar halinde gönderiliyor ve sunucuda birleştiriliyor; kesilen bir yükleme baştan değil, son parçadan devam ediyor.
-- **HLS'e transcoding.** Yükleme sonrası FFmpeg kaynağı HLS çözünürlüklerine dönüştürüyor; oynatıcı kaliteyi her öğrencinin bant genişliğine göre ayarlıyor. Süre ve thumbnail gibi metadata aynı adımda çıkarılıp PostgreSQL'e kaydediliyor.
-- **Erişim kontrolü.** Üç rollü JWT kimlik doğrulama — **Admin**, **Teacher** ve **Student** — kurumsal kurulumlar için LDAP/Active Directory girişi ve hassas route'larda rate limiting.
+- **Yükleme ve işleme.** Öğretmenler dersleri, boyut sınırı ayarlanabilen ve doğrulama yapan bir upload endpoint'i üzerinden yüklüyor; Nginx çok GB'lık istekler için ayarlandı. FFmpeg küçük resimleri üretiyor ve süreyi okuyor; bunlar diğer metadata ile birlikte PostgreSQL'de saklanıyor.
+- **Donmayan streaming.** Videolar HTTP **byte-range** desteğiyle (`Accept-Ranges`) sunuluyor; böylece oynatıcılar büyük dosyaların tamamını indirmeden ileri sarabiliyor ve tampon yapabiliyor.
+- **Kurumsal giriş.** Üç rollü (**Admin**, **Teacher**, **Student**) JWT kimlik doğrulama ve **LDAP / Active Directory** girişi: önce yerel hesaplar, sonra dizin kontrol ediliyor; ilk kez gelen kurumsal kullanıcılar anında oluşturuluyor.
+- **Okul yönetimi.** Adminler kullanıcıları CSV ile toplu içe aktarıp giriş bilgilerini e-postayla gönderebiliyor; öğrenciler sınavlara giriyor ve video bazında ilerlemelerini takip ediyor.
 
-## İşletme
+## Yayında
 
-Platform Linux üzerinde Docker'da çalışıyor; **Nginx** reverse proxy olarak TLS'i sonlandırıyor ve stream segmentlerini verimli şekilde sunuyor, Express API ise iş mantığını yönetiyor.
+API, Linux üzerinde TLS sonlandıran bir reverse proxy olan **Nginx**'in arkasında çalışıyor; her route'un önünde Helmet, rate limiting ve istek doğrulama var. Deployment şablonları hem Docker hem PM2'yi kapsıyor.
 
 ## Neyi geliştirirdim
 
-Transcoding'i kuyruk tabanlı bir worker havuzuna taşıyarak upload'ların CPU yoğun işleri beklememesini sağlamak ve HLS segmentlerini önünde CDN olan bir object storage'a koymak.
+Adaptif bitrate için yüklemeleri kuyruk destekli bir worker havuzunda HLS'e transcode etmek, video dosyalarını CDN arkasındaki object storage'a taşımak ve yarıda kalan yüklemeleri chunking ile devam ettirmek.

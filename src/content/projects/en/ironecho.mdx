@@ -8,7 +8,7 @@ stack: [Node.js, TypeScript, Express, MongoDB, Realm, Socket.io, Docker Compose,
 repo: https://github.com/utku-kucuk/IronEcho
 diagram: ironecho
 highlights:
-  - Custom synchronisation with server-side conflict resolution
+  - Custom sync engine with timestamp-based conflict resolution
   - Offline-first client on Realm, queued writes replayed on reconnect
   - JWT access + refresh token flow
   - One-command Docker Compose deployment, down to a Raspberry Pi
@@ -23,7 +23,7 @@ Gyms are notoriously bad places for connectivity, and most fitness apps either s
 I designed the backend and the synchronisation engine.
 
 - **Local-first.** The mobile client writes to Realm instantly; every change is recorded and queued.
-- **Sync & conflict resolution.** When connectivity returns, queued operations are replayed against the API. The server validates each change and resolves conflicts with a last-write-wins strategy guarded by server-side rules, so data stays consistent across devices.
+- **Sync & conflict resolution.** When connectivity returns, queued operations are replayed against the API. The API validates every change with Joi, and the sync engine resolves conflicts last-write-wins by comparing modification timestamps, so data stays consistent across devices.
 - **Real-time updates.** Socket.io pushes changes to other connected sessions.
 - **Security.** Stateless JWTs with separate access and refresh tokens, Helmet, rate limiting and Joi validation on every input.
 
