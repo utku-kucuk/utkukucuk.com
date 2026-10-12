@@ -1,0 +1,35 @@
+---
+title: utkukucuk.com
+tagline: 'Bu site: hızlı, iki dilli ve güvenli'
+summary: Şu an okuduğunuz portfolyo, bir üretim servisi gibi geliştirildi. Statik Astro sayfaları, elle yazılmış bir WebGL hero, sıkı bir Content Security Policy ve lint, type-check ile Lighthouse geçmeden merge'e izin vermeyen bir pull request süreci var.
+order: 5
+role: Tasarım, geliştirme ve yayına alma
+stack: [Astro, TypeScript, Tailwind CSS, WebGL, GSAP, GitHub Actions, Lighthouse CI, Cloudflare]
+repo: https://github.com/utku-kucuk/utkukucuk.com
+live: https://utkukucuk.com
+diagram: portfolio
+highlights:
+  - Lighthouse skorlarını yüksek tutmak için three.js yerine ham WebGL hero
+  - Edge'den sunulan sıkı CSP ve güvenlik header'ları
+  - Korumalı main branch; her PR'da lint, type-check ve Lighthouse CI
+  - Yerelleştirilmiş route ve metadata ile İngilizce ve Türkçe
+---
+
+## Hedef
+
+Portfolyo, çoğu zaman bir işe alımcının ya da mühendisin gördüğü ilk kod. Bu yüzden backend işlerimde uyguladığım alışkanlıkları burada da göstermek istedim: ölçülebilir performans, varsayılan olarak güvenlik ve dikkatli olmaya bağlı kalmayan bir yayın süreci.
+
+## Ne geliştirdim
+
+- **Önce statik.** Astro her sayfayı build sırasında HTML'e çeviriyor; case study'ler için content collection'lar, deneyim ve yetkinlikler için tipli veri kullanılıyor. JavaScript yalnızca etkileşimli parçalarda yükleniyor.
+- **Ağırlığını hak eden bir hero.** Animasyonlu servis grafiği önce three.js ile yazılmıştı ve mobilde ana thread'e saniyelerce yük bindiriyordu. Kendi matris yardımcılarıyla küçük, ham bir WebGL renderer olarak yeniden yazdım. Tarayıcı boştayken yükleniyor, azaltılmış hareket tercih eden kullanıcılarda hiç çalışmıyor.
+- **Güvenli.** Sıkı bir Content Security Policy build sırasında üretiliyor, güvenlik header'ları edge'den sunuluyor. Site inline script ya da style olmadan çalışıyor.
+- **İki dilli.** İngilizce `/` altında, Türkçe `/tr` altında; route'lar, metadata ve iletişim formu yerelleştirilmiş.
+
+## Yayın süreci
+
+Her değişiklik korumalı `main` branch'ine bir pull request ile giriyor. GitHub Actions lint, Prettier, `astro check` ve production build çalıştırıyor; merge'e izin verilmeden önce Lighthouse CI'ın da geçmesi gerekiyor. Merge edilen değişiklikler build edilip Cloudflare Workers static assets'e deploy ediliyor.
+
+## Sırada ne var
+
+Otomatik görsel regresyon testleri ve backend konularında yazılar için küçük bir blog.

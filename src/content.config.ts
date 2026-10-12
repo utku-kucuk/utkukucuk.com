@@ -15,7 +15,7 @@ const projects = defineCollection({
     repo: z.url(),
     live: z.url().optional(),
     status: z.enum(['in-progress']).optional(),
-    diagram: z.enum(['commerce', 'viducate', 'ironecho', 'smarthome', 'hirehub', 'colorexplorer']),
+    diagram: z.enum(['commerce', 'viducate', 'ironecho', 'smarthome', 'hirehub', 'portfolio']),
     highlights: z.array(z.string()).max(4),
   }),
 });
