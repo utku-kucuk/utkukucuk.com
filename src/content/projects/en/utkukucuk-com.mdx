@@ -1,0 +1,35 @@
+---
+title: utkukucuk.com
+tagline: This site — fast, bilingual and locked down
+summary: The portfolio you're reading, built like a production service — static Astro pages with a hand-written WebGL hero, a strict Content Security Policy, and a pull-request pipeline that blocks merges unless lint, type-check and Lighthouse pass.
+order: 5
+role: Design, implementation & delivery
+stack: [Astro, TypeScript, Tailwind CSS, WebGL, GSAP, GitHub Actions, Lighthouse CI, Cloudflare]
+repo: https://github.com/utku-kucuk/utkukucuk.com
+live: https://utkukucuk.com
+diagram: portfolio
+highlights:
+  - Raw WebGL hero instead of three.js to keep Lighthouse scores high
+  - Strict CSP and security headers served from the edge
+  - Protected main branch; lint, type-check and Lighthouse CI on every PR
+  - English and Turkish with localized routes and metadata
+---
+
+## The goal
+
+A portfolio is often the first code a recruiter or engineer sees, so I wanted it to show the same habits I bring to backend work: measurable performance, security by default and a delivery process that doesn't depend on being careful.
+
+## What I built
+
+- **Static first.** Astro renders every page to HTML at build time, with content collections for case studies and typed data for experience and skills. Only the interactive pieces ship JavaScript.
+- **A hero that earns its weight.** The animated service graph started on three.js, which cost seconds of main-thread time on mobile. I rewrote it as a small raw WebGL renderer with its own matrix helpers, loaded only when the browser is idle and skipped for reduced-motion users.
+- **Locked down.** A strict Content Security Policy is generated at build time, and security headers are served from the edge, so the site works with no inline scripts or styles.
+- **Bilingual.** English at `/` and Turkish under `/tr`, with localized routes, metadata and a contact form.
+
+## Delivery
+
+Every change goes through a pull request to a protected `main` branch. GitHub Actions runs lint, Prettier, `astro check` and a production build, and Lighthouse CI must pass before a merge is allowed. Merged changes are built and deployed to Cloudflare Workers static assets.
+
+## What's next
+
+Automated visual regression tests and a small blog for write-ups on backend topics.
