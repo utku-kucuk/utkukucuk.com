@@ -1,35 +1,35 @@
 ---
 title: Commerce Platform
-tagline: E-commerce backend as Spring Boot microservices
-summary: Catalog, cart and order domains split into Spring Boot services behind stateless JWT security, documented with OpenAPI and shipped in containers.
-order: 1
+tagline: E-commerce backend on Spring Boot
+summary: An e-commerce backend I'm building in the open with Java 21 and Spring Boot 3 — starting from the domain model and growing towards domain-split services, JWT security and event-driven orders.
+order: 5
+status: in-progress
 role: Backend engineer — design & implementation
-stack: [Java, Spring Boot 3, Spring Security, Spring Data JPA, PostgreSQL, Docker, JUnit, Mockito]
+stack: [Java 21, Spring Boot 3, Spring Data JPA, H2, Maven]
 repo: https://github.com/utku-kucuk/commerce-platform
 diagram: commerce
 highlights:
-  - Domain-split services for catalog, cart and order
-  - Stateless JWT authentication with role-based access control
-  - Unit and integration tests with JUnit and Mockito
-  - Every service containerised with its PostgreSQL database
+  - Domain model for users, roles, products, addresses and order status
+  - Planned — catalog, cart and order services with stateless JWT and RBAC
+  - Planned — Testcontainers integration tests and CI on every push
+  - Planned — order events over Kafka and a Docker Compose stack
 ---
 
-## The problem
+## Why this project
 
-Most e-commerce tutorials stop at a single CRUD app. I wanted a backend that looks like the systems I'd work on in a team: clear domain boundaries, a security layer that doesn't leak into business code, and services that can be built, tested and deployed independently.
+Most e-commerce tutorials stop at a single CRUD app. I'm building a backend that looks like the systems I'd work on in a team: clear domain boundaries, a security layer that doesn't leak into business code, and services that can be built, tested and deployed independently.
 
-## What I built
+## Where it stands
 
-The platform is split along its domains — **catalog**, **cart** and **order** — each a Spring Boot 3 service with its own REST API documented through OpenAPI. Persistence goes through Spring Data JPA on PostgreSQL, and every service ships as a Docker image so the whole system comes up with one command.
+This is an **early-stage, in-progress** project. The Spring Boot 3 application on Java 21 is in place, along with the core **domain model** — users and their roles, products, addresses and the order lifecycle — mapped with Spring Data JPA on an in-memory H2 database for fast iteration.
 
-Security is handled by **Spring Security with stateless JWTs**: a token carries the user's roles, and each service enforces role-based access on its own endpoints. That keeps services horizontally scalable — there is no shared session store to coordinate.
+## Roadmap
 
-## Engineering notes
+The architecture diagram shows the **target** design, built in this order:
 
-- **Testing as a design tool.** Business logic is unit-tested with JUnit and Mockito; integration tests exercise the HTTP layer and the database together so that contract changes are caught early.
-- **API first.** OpenAPI specs make each service self-describing and give consumers a contract to code against.
-- **Containers from day one.** Running each service with its own PostgreSQL instance in Docker keeps local and CI environments identical.
+1. **Domain-split services** for catalog, cart and order, each with its own REST API documented through OpenAPI.
+2. **Stateless security** with Spring Security and JWTs carrying roles, enforced per service.
+3. **Tests that matter** — unit tests with JUnit and Mockito, integration tests against real PostgreSQL via Testcontainers, all running in GitHub Actions.
+4. **Asynchronous order flow** with events over Kafka, and the whole stack running from a single Docker Compose file.
 
-## What's next
-
-Service discovery and an API gateway, asynchronous order events over a message broker, and deploying the stack to Kubernetes — the cloud-native direction I'm actively growing into.
+Follow the repository to see each step land.
