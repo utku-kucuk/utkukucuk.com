@@ -29,8 +29,31 @@ const target = otherLocale(locale);
 >
   <div class="container-site flex h-16 items-center justify-between gap-6">
     <a href={home} class="group flex items-center gap-3" aria-label="Utku Küçük — home">
-      <span class="grid size-9 place-items-center rounded-lg border border-line font-mono text-sm font-semibold transition-colors group-hover:border-accent group-hover:text-accent">
-        uk
+      <span class="grid size-9 place-items-center rounded-lg border border-line transition-colors group-hover:border-accent">
+        <!-- Same U·K mark as public/favicon.svg -->
+        <svg viewBox="12 12 40 40" class="size-6" aria-hidden="true">
+          <defs>
+            <linearGradient
+              id="logo-mark"
+              x1="14"
+              y1="14"
+              x2="50"
+              y2="50"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset="0" class="[stop-color:var(--accent)]" />
+              <stop offset="1" class="[stop-color:var(--accent-2)]" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M14 16v20a10 10 0 0 0 20 0V16v32M34 32l16-16M39.5 26.5 50 48"
+            fill="none"
+            stroke="url(#logo-mark)"
+            stroke-width="5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </svg>
       </span>
       <span class="hidden text-sm font-medium tracking-tight sm:inline">Utku Küçük</span>
     </a>

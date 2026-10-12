@@ -27,7 +27,7 @@ export interface Diagram {
 
 export const diagrams: Record<string, Diagram> = {
   commerce: {
-    group: { label: 'docker compose', x: 128, y: 14, w: 262, h: 212 },
+    group: { label: 'target · docker compose', x: 128, y: 14, w: 262, h: 212 },
     nodes: [
       { id: 'client', label: 'Client', sub: 'REST', x: 10, y: 98, w: 92, kind: 'client' },
       {
@@ -154,6 +154,62 @@ export const diagrams: Record<string, Diagram> = {
       { from: 'lamp', to: 'mqtt' },
       { from: 'climate', to: 'mqtt' },
       { from: 'mqtt', to: 'ha' },
+    ],
+  },
+  hirehub: {
+    group: { label: 'browser · spa', x: 116, y: 14, w: 274, h: 212 },
+    nodes: [
+      { id: 'user', label: 'Browser', sub: '3 roles', x: 6, y: 98, w: 86, kind: 'client' },
+      {
+        id: 'router',
+        label: 'React Router',
+        sub: 'protected routes',
+        x: 130,
+        y: 98,
+        w: 108,
+        kind: 'edge',
+      },
+      { id: 'ctx', label: 'Context', sub: 'auth · jobs', x: 270, y: 30, w: 110, kind: 'service' },
+      { id: 'svc', label: 'services/', sub: 'REST-shaped', x: 270, y: 98, w: 110, kind: 'service' },
+      { id: 'store', label: 'Mock API', sub: 'localStorage', x: 270, y: 166, w: 110, kind: 'data' },
+    ],
+    edges: [
+      { from: 'user', to: 'router' },
+      { from: 'router', to: 'ctx' },
+      { from: 'ctx', to: 'svc' },
+      { from: 'svc', to: 'store' },
+    ],
+  },
+  colorexplorer: {
+    group: { label: 'browser · static', x: 116, y: 14, w: 274, h: 212 },
+    nodes: [
+      { id: 'input', label: 'Input', sub: 'any CSS colour', x: 6, y: 98, w: 92, kind: 'client' },
+      { id: 'culori', label: 'culori', sub: 'parse · gamut', x: 130, y: 98, w: 100, kind: 'edge' },
+      { id: 'lib', label: 'lib/', sub: 'unit-tested', x: 262, y: 30, w: 118, kind: 'service' },
+      {
+        id: 'ui',
+        label: 'React UI',
+        sub: 'palette · WCAG',
+        x: 262,
+        y: 98,
+        w: 118,
+        kind: 'service',
+      },
+      {
+        id: 'hash',
+        label: 'URL hash',
+        sub: 'shareable state',
+        x: 262,
+        y: 166,
+        w: 118,
+        kind: 'data',
+      },
+    ],
+    edges: [
+      { from: 'input', to: 'culori' },
+      { from: 'culori', to: 'lib' },
+      { from: 'lib', to: 'ui' },
+      { from: 'ui', to: 'hash' },
     ],
   },
 };

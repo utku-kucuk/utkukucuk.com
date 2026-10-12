@@ -33,8 +33,13 @@ const { Content } = await render(project);
       </a>
 
       <header class="mt-10 max-w-4xl">
-        <p data-reveal class="eyebrow mb-4 text-accent">
+        <p data-reveal class="eyebrow mb-4 flex flex-wrap items-center gap-3 text-accent">
           {data.tagline}
+          {data.status === 'in-progress' && (
+            <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-[0.65rem]">
+              {t('work.inProgress')}
+            </span>
+          )}
         </p>
         <h1
           data-reveal-lines
@@ -89,15 +94,28 @@ const { Content } = await render(project);
                 </li>
               ))}
             </ul>
-            <a
-              href={data.repo}
-              target="_blank"
-              rel="noopener"
-              data-magnetic="0.2"
-              class="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-fg-subtle"
-            >
-              {t('project.viewSource')} ↗
-            </a>
+            <div class="mt-8 flex flex-wrap gap-3">
+              {data.live && (
+                <a
+                  href={data.live}
+                  target="_blank"
+                  rel="noopener"
+                  data-magnetic="0.2"
+                  class="inline-flex items-center gap-2 rounded-full bg-fg px-5 py-2.5 text-sm font-medium text-bg"
+                >
+                  {t('project.liveDemo')} ↗
+                </a>
+              )}
+              <a
+                href={data.repo}
+                target="_blank"
+                rel="noopener"
+                data-magnetic="0.2"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-fg-subtle"
+              >
+                {t('project.viewSource')} ↗
+              </a>
+            </div>
           </div>
         </aside>
 

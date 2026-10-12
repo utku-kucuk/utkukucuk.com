@@ -1,0 +1,41 @@
+---
+title: HireHub
+tagline: Role-based job board with protected routes
+summary: A job board SPA for three roles — job seekers search, save and apply; employers post jobs and review applicants; admins manage companies — running fully in the browser on a REST-shaped mock API.
+order: 3
+role: Frontend — design & implementation
+stack: [React 19, React Router 7, Context API, Tailwind CSS 4, Vite, GitHub Actions]
+repo: https://github.com/utku-kucuk/hirehub
+live: https://utku-kucuk.github.io/hirehub/
+diagram: hirehub
+highlights:
+  - Three roles with route guards for seekers, employers and admins
+  - Async service layer shaped like a REST client, swappable for a real API
+  - Search across 1,000+ listings with filters, sorting and pagination
+  - Route-level code splitting, dark mode and per-route meta tags
+---
+
+## The problem
+
+A job board looks simple until three different kinds of users share it. Job seekers, employers and admins each need their own pages, their own data and clear rules about who can see what — and the app should be easy to try without setting anything up.
+
+## What I built
+
+HireHub is a single-page app with **role-based access** at its core.
+
+- **Job seekers** build a profile with a résumé and a completeness meter, save jobs, apply and track or withdraw applications.
+- **Employers** post jobs with salary ranges, requirements and deadlines, manage their postings and review applicants.
+- **Admins** get a dashboard, manage companies, assign employers and read contact messages.
+
+A `ProtectedRoute` guard checks the signed-in user's role on every protected page and sends signed-out users to the sign-in screen.
+
+## Engineering notes
+
+- **API-shaped data layer.** There is no backend on purpose: every call in `services/` is async, waits on a simulated network delay and reads or writes `localStorage`. Components only talk to these services, so pointing them at a real REST API is a contained change.
+- **Deterministic seed data.** A seeded random generator produces 1,000+ jobs and their companies, so IDs stay stable across reloads.
+- **State without a library.** React Context covers auth, jobs and theme; data contexts cache with a 5-minute TTL and refresh when the window regains focus.
+- **Shipped like a product.** Route-level code splitting with `React.lazy`, per-route titles and descriptions, and a GitHub Actions pipeline that lints, builds and deploys to GitHub Pages.
+
+## What's next
+
+Replace the mock services with a Spring Boot API — JWT auth, PostgreSQL and the same role model enforced on the server.

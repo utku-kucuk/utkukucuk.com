@@ -1,0 +1,41 @@
+---
+title: HireHub
+tagline: Korumalı route'lara sahip rol bazlı iş ilanı platformu
+summary: Üç rol için bir iş ilanı SPA'sı. İş arayanlar ilan arar, kaydeder ve başvurur; işverenler ilan yayınlayıp başvuranları inceler; adminler şirketleri yönetir. Tamamı tarayıcıda, REST istemcisi gibi tasarlanmış bir mock API üzerinde çalışıyor.
+order: 3
+role: Frontend — tasarım ve geliştirme
+stack: [React 19, React Router 7, Context API, Tailwind CSS 4, Vite, GitHub Actions]
+repo: https://github.com/utku-kucuk/hirehub
+live: https://utku-kucuk.github.io/hirehub/
+diagram: hirehub
+highlights:
+  - İş arayan, işveren ve admin için route guard'lı üç rol
+  - REST istemcisi gibi tasarlanmış, gerçek bir API ile değiştirilebilen async servis katmanı
+  - Filtreleme, sıralama ve sayfalama ile 1.000+ ilan arasında arama
+  - Route bazlı code splitting, karanlık mod ve sayfa bazlı meta etiketleri
+---
+
+## Problem
+
+Bir iş ilanı sitesi, üç farklı türde kullanıcı aynı uygulamayı paylaşana kadar basit görünür. İş arayanların, işverenlerin ve adminlerin her birinin kendi sayfalarına, kendi verilerine ve kimin neyi görebileceğine dair net kurallara ihtiyacı var. Uygulama ayrıca hiçbir kurulum gerektirmeden denenebilmeli.
+
+## Ne geliştirdim
+
+HireHub, merkezinde **rol bazlı erişim** olan bir single-page uygulama.
+
+- **İş arayanlar** özgeçmiş ve tamamlanma göstergesiyle profil oluşturuyor, ilan kaydediyor, başvuruyor ve başvurularını takip edip geri çekebiliyor.
+- **İşverenler** maaş aralığı, gereksinimler ve son başvuru tarihiyle ilan yayınlıyor, ilanlarını yönetiyor ve başvuranları inceliyor.
+- **Adminler** bir dashboard'a sahip; şirketleri yönetiyor, işverenleri şirketlere atıyor ve iletişim mesajlarını okuyor.
+
+`ProtectedRoute` guard'ı her korumalı sayfada giriş yapan kullanıcının rolünü kontrol ediyor, giriş yapmamış kullanıcıları giriş ekranına yönlendiriyor.
+
+## Mühendislik notları
+
+- **API gibi tasarlanmış veri katmanı.** Bilerek bir backend yok: `services/` içindeki her çağrı async, simüle edilmiş bir ağ gecikmesi bekliyor ve `localStorage`'a okuma/yazma yapıyor. Bileşenler yalnızca bu servislerle konuştuğu için gerçek bir REST API'ye geçmek sınırlı bir değişiklik.
+- **Deterministik seed verisi.** Seed'li bir rastgele sayı üreteci 1.000+ ilanı ve şirketlerini üretiyor; böylece ID'ler sayfa yenilense de değişmiyor.
+- **Kütüphanesiz state.** React Context kimlik doğrulama, ilanlar ve temayı yönetiyor; veri context'leri 5 dakikalık TTL ile cache'liyor ve pencereye geri dönüldüğünde yenileniyor.
+- **Ürün gibi yayınlandı.** `React.lazy` ile route bazlı code splitting, sayfa bazlı başlık ve açıklamalar, lint, build ve GitHub Pages'e deploy yapan bir GitHub Actions pipeline'ı.
+
+## Sırada ne var
+
+Mock servisleri bir Spring Boot API ile değiştirmek: JWT kimlik doğrulama, PostgreSQL ve aynı rol modelinin sunucuda uygulanması.

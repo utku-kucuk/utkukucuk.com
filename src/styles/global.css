@@ -12,6 +12,7 @@
   --line: rgb(15 16 19 / 0.1);
   --accent: #5b3df5;
   --accent-2: #0f766e;
+  --status: #16a34a;
   --accent-contrast: #ffffff;
   --glow: rgb(91 61 245 / 0.18);
   color-scheme: light;
@@ -26,6 +27,7 @@
   --line: rgb(236 237 240 / 0.09);
   --accent: #8b7bff;
   --accent-2: #4fe3c8;
+  --status: #22c55e;
   --accent-contrast: #07080b;
   --glow: rgb(139 123 255 / 0.22);
   color-scheme: dark;
@@ -40,6 +42,7 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-status: var(--status);
   --color-accent-contrast: var(--accent-contrast);
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
