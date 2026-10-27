@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/utku-kucuk/utkukucuk.com/actions/workflows/ci.yml/badge.svg)](https://github.com/utku-kucuk/utkukucuk.com/actions/workflows/ci.yml)
 
-Source code for the personal portfolio of **Muhammet Utku Küçük**, Backend Software Engineer — live at **[utkukucuk.com](https://utkukucuk.com)**.
+Source code for the personal portfolio of **Muhammet Utku Küçük**, Backend Developer — live at **[utkukucuk.com](https://utkukucuk.com)**.
 
 ![Open Graph preview](public/og/og-en.jpg)
 

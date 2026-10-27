@@ -1,18 +1,18 @@
 ---
 title: Viducate
 tagline: Kurumsal giriş destekli video eğitim platformu
-summary: Yapılandırılmış video kursları, sınavlar ve ilerleme takibi için bir online eğitim platformu. Büyük video yüklemeleri, byte-range streaming, FFmpeg işleme ve üç rollü JWT + LDAP kimlik doğrulama içeriyor.
+summary: Yapılandırılmış video kursları, sınavlar ve ilerleme takibi için bir online eğitim platformu. Parçalı video yükleme, FFmpeg transcoding, byte-range streaming ve üç rollü JWT + LDAP kimlik doğrulama içeriyor.
 order: 1
 role: Backend ve video dağıtımı
-stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
+stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Nginx, PM2, JWT, LDAP]
 repo: https://github.com/utku-kucuk/viducate
 live: https://utku-kucuk.github.io/viducate/
 diagram: viducate
 highlights:
-  - Büyük ders videolarının yüklenmesi ve akıcı oynatma için byte-range streaming
+  - Parçalı ders videosu yükleme, FFmpeg transcoding ve byte-range streaming
   - Just-in-time hesap oluşturmalı JWT + LDAP / Active Directory girişi
   - Admin / Teacher / Student rolleri, sınavlar ve ilerleme takibi
-  - Linux üzerinde Nginx arkasında; Docker ve PM2 kurulumlarıyla
+  - Linux üzerinde PM2 ile, Nginx reverse proxy arkasında
 ---
 
 ## Problem
@@ -23,15 +23,15 @@ Ders videoları büyük, çoğu zaman birkaç gigabayt. Kurumlar da çalışanla
 
 Yapılandırılmış video kursları, sınavlar ve ilerleme takibi sunan Viducate'in backend'ini ve **video dağıtımını** tasarladım.
 
-- **Yükleme ve işleme.** Öğretmenler dersleri, boyut sınırı ayarlanabilen ve doğrulama yapan bir upload endpoint'i üzerinden yüklüyor; Nginx çok GB'lık istekler için ayarlandı. FFmpeg küçük resimleri üretiyor ve süreyi okuyor; bunlar diğer metadata ile birlikte PostgreSQL'de saklanıyor.
+- **Yükleme ve işleme.** Öğretmenler dersleri, boyut sınırı ayarlanabilen ve doğrulama yapan bir upload endpoint'i üzerinden parça parça yüklüyor; Nginx çok GB'lık istekler için ayarlandı. FFmpeg süreyi okuyor ve her videoyu büyütme yapmadan 360p–1080p çözünürlüklere transcode ediyor; bunlar diğer metadata ile birlikte PostgreSQL'de saklanıyor.
 - **Donmayan streaming.** Videolar HTTP **byte-range** desteğiyle (`Accept-Ranges`) sunuluyor; böylece oynatıcılar büyük dosyaların tamamını indirmeden ileri sarabiliyor ve tampon yapabiliyor.
 - **Kurumsal giriş.** Üç rollü (**Admin**, **Teacher**, **Student**) JWT kimlik doğrulama ve **LDAP / Active Directory** girişi: önce yerel hesaplar, sonra dizin kontrol ediliyor; ilk kez gelen kurumsal kullanıcılar anında oluşturuluyor.
 - **Okul yönetimi.** Adminler kullanıcıları CSV ile toplu içe aktarıp giriş bilgilerini e-postayla gönderebiliyor; öğrenciler sınavlara giriyor ve video bazında ilerlemelerini takip ediyor.
 
 ## Yayında
 
-API, Linux üzerinde TLS sonlandıran bir reverse proxy olan **Nginx**'in arkasında çalışıyor; her route'un önünde Helmet, rate limiting ve istek doğrulama var. Deployment şablonları hem Docker hem PM2'yi kapsıyor.
+API, Linux üzerinde TLS sonlandıran bir reverse proxy olan **Nginx**'in arkasında çalışıyor; her route'un önünde Helmet, rate limiting ve istek doğrulama var. Uygulama, bir deployment script'i ve şablonuyla kurulan PM2 altında çalışıyor.
 
 ## Neyi geliştirirdim
 
-Adaptif bitrate için yüklemeleri kuyruk destekli bir worker havuzunda HLS'e transcode etmek, video dosyalarını CDN arkasındaki object storage'a taşımak ve yarıda kalan yüklemeleri chunking ile devam ettirmek.
+Adaptif bitrate için çözünürlükleri kuyruk destekli bir worker havuzunda HLS olarak paketlemek, video dosyalarını CDN arkasındaki object storage'a taşımak ve stack'i Docker ile container'laştırmak.

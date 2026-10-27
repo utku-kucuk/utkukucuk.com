@@ -9,9 +9,9 @@ export const defaultLocale: Locale = 'en';
 
 export const ui = {
   en: {
-    'meta.title': 'Utku Küçük — Backend Software Engineer',
+    'meta.title': 'Utku Küçük — Backend Developer',
     'meta.description':
-      'Backend Software Engineer building reliable APIs and infrastructure with Java, Spring Boot, Docker and Linux. Based in Istanbul.',
+      'Backend developer building REST APIs and backend services with PHP, Node.js and Python, focused on Java and Spring Boot. Based in Istanbul.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.work': 'Work',
@@ -24,29 +24,25 @@ export const ui = {
     'lang.switch': 'Türkçe',
     'lang.switchLabel': 'Bu sayfayı Türkçe görüntüle',
     'hero.greeting': 'Hi, I’m',
-    'hero.role': 'Backend Software Engineer',
+    'hero.role': 'Backend Developer',
     'hero.tagline':
-      'I design, ship and operate the services behind products — APIs, data pipelines and the infrastructure that keeps them running.',
+      'I build the services behind products — REST APIs, data models and the Docker, Nginx and CI/CD setup that ships them.',
     'hero.cta.work': 'Selected work',
     'hero.cta.contact': 'Get in touch',
     'hero.scroll': 'Scroll',
     'hero.available': 'Open to new opportunities',
     'about.eyebrow': 'About',
-    'about.title': 'I build backend systems — and keep them running.',
+    'about.title': 'I build backend systems — and the setup that ships them.',
     'about.p1':
-      'I’m Utku — a backend software engineer based in Istanbul. I work mostly with Java and Spring Boot, and reach for Python, Go or Node.js when they fit the job better.',
+      'I’m Utku — a backend developer in Istanbul and a 2025 Computer Engineering graduate. I’ve built REST APIs and backend services with PHP (Laravel), Node.js/TypeScript and Python, and I’m focusing on Java and Spring Boot.',
     'about.p2':
-      'Across corporate, remote and R&D teams I’ve shipped Web3 data integrations, a video-streaming platform and IoT backends — and I care just as much about the part after the merge: containers, reverse proxies, CI/CD and logs at 3 a.m.',
+      'At Covalent, on corporate client projects and in a university UAV R&D team I’ve worked on Web3 data APIs, admin panels and image processing — and I care about the part after the merge too: containers, reverse proxies, CI/CD and logs.',
     'about.p3':
-      'Right now I’m deepening cloud-native skills with Kubernetes and AWS, and reviewing R&D projects at Zaim Teknopark.',
-    'about.stat.services': 'services containerised',
-    'about.stat.deploy': 'faster deployments (2h → 20m)',
-    'about.stat.calls': 'fewer external API calls',
-    'about.stat.uptime': 'uptime sustained',
+      'Right now I’m building a Spring Boot e-commerce backend in the open and reviewing R&D projects at Zaim Teknopark.',
     'about.now': 'Now',
     'about.now.text': 'R&D Project Evaluator · Zaim Teknopark',
-    'about.learning': 'Learning',
-    'about.learning.text': 'Kubernetes · AWS · system design',
+    'about.learning': 'Focus',
+    'about.learning.text': 'Java & Spring Boot · AWS · Kubernetes',
     'about.education': 'Education',
     'about.education.text': 'B.Sc. Computer Engineering · Istanbul Aydın University',
     'about.languages': 'Languages',
@@ -77,7 +73,8 @@ export const ui = {
     'project.liveDemo': 'Open live demo',
     'stack.eyebrow': 'Stack',
     'stack.title': 'Tools I build with.',
-    'stack.subtitle': 'Java & Spring Boot at the core — the rest chosen per problem.',
+    'stack.subtitle':
+      'REST APIs at the core — PHP, Node.js and Python on the job, Java & Spring Boot as my focus.',
     'contact.eyebrow': 'Contact',
     'contact.title': 'Let’s build something reliable.',
     'contact.subtitle':
@@ -101,9 +98,9 @@ export const ui = {
     'footer.top': 'Back to top',
   },
   tr: {
-    'meta.title': 'Utku Küçük — Backend Yazılım Mühendisi',
+    'meta.title': 'Utku Küçük — Backend Developer',
     'meta.description':
-      'Java, Spring Boot, Docker ve Linux ile güvenilir API’ler ve altyapılar geliştiren Backend Yazılım Mühendisi. İstanbul.',
+      'PHP, Node.js ve Python ile REST API’ler ve backend servisleri geliştiren, Java ve Spring Boot’a odaklanan Backend Developer. İstanbul.',
     'nav.about': 'Hakkımda',
     'nav.experience': 'Deneyim',
     'nav.work': 'Projeler',
@@ -116,29 +113,25 @@ export const ui = {
     'lang.switch': 'English',
     'lang.switchLabel': 'View this page in English',
     'hero.greeting': 'Merhaba, ben',
-    'hero.role': 'Backend Yazılım Mühendisi',
+    'hero.role': 'Backend Developer',
     'hero.tagline':
-      'Ürünlerin arkasındaki servisleri tasarlıyor, geliştiriyor ve işletiyorum: API’ler, veri akışları ve hepsini ayakta tutan altyapı.',
+      'Ürünlerin arkasındaki servisleri geliştiriyorum: REST API’ler, veri modelleri ve onları yayına alan Docker, Nginx ve CI/CD kurulumu.',
     'hero.cta.work': 'Projelerim',
     'hero.cta.contact': 'İletişime geç',
     'hero.scroll': 'Kaydır',
     'hero.available': 'Yeni fırsatlara açığım',
     'about.eyebrow': 'Hakkımda',
-    'about.title': 'Backend sistemleri geliştiriyor ve ayakta tutuyorum.',
+    'about.title': 'Backend sistemleri ve onları yayına alan altyapıyı geliştiriyorum.',
     'about.p1':
-      'Ben Utku — İstanbul’da yaşayan bir backend yazılım mühendisiyim. Ağırlıklı olarak Java ve Spring Boot ile çalışıyor, işe daha uygun olduğunda Python, Go veya Node.js kullanıyorum.',
+      'Ben Utku — İstanbul’da yaşayan, 2025 Bilgisayar Mühendisliği mezunu bir backend developer’ım. PHP (Laravel), Node.js/TypeScript ve Python ile REST API’ler ve backend servisleri geliştirdim; odağım Java ve Spring Boot.',
     'about.p2':
-      'Kurumsal, remote ve Ar-Ge ekiplerinde Web3 veri entegrasyonları, bir video streaming platformu ve IoT backend’leri geliştirdim. Merge sonrasını da en az kod kadar önemsiyorum: container’lar, reverse proxy’ler, CI/CD ve gece 3’te okunan loglar.',
+      'Covalent’te, kurumsal müşteri projelerinde ve bir üniversite İHA Ar-Ge takımında Web3 veri API’leri, yönetim panelleri ve görüntü işleme üzerinde çalıştım. Merge sonrasını da önemsiyorum: container’lar, reverse proxy’ler, CI/CD ve loglar.',
     'about.p3':
-      'Şu anda Kubernetes ve AWS ile cloud-native yetkinliklerimi derinleştiriyor, Zaim Teknopark’ta Ar-Ge projelerini değerlendiriyorum.',
-    'about.stat.services': 'servis container’a taşındı',
-    'about.stat.deploy': 'daha hızlı deployment (2s → 20dk)',
-    'about.stat.calls': 'daha az harici API çağrısı',
-    'about.stat.uptime': 'uptime sağlandı',
+      'Şu anda açık kaynak bir Spring Boot e-ticaret backend’i geliştiriyor, Zaim Teknopark’ta Ar-Ge projelerini değerlendiriyorum.',
     'about.now': 'Şu an',
     'about.now.text': 'Ar-Ge Proje Değerlendiricisi · Zaim Teknopark',
-    'about.learning': 'Öğreniyorum',
-    'about.learning.text': 'Kubernetes · AWS · sistem tasarımı',
+    'about.learning': 'Odak',
+    'about.learning.text': 'Java & Spring Boot · AWS · Kubernetes',
     'about.education': 'Eğitim',
     'about.education.text': 'Bilgisayar Mühendisliği (Lisans) · İstanbul Aydın Üniversitesi',
     'about.languages': 'Diller',
@@ -169,7 +162,8 @@ export const ui = {
     'project.liveDemo': 'Canlı demoyu aç',
     'stack.eyebrow': 'Teknolojiler',
     'stack.title': 'Kullandığım araçlar.',
-    'stack.subtitle': 'Merkezde Java ve Spring Boot; gerisi probleme göre seçiliyor.',
+    'stack.subtitle':
+      'Merkezde REST API’ler; işte PHP, Node.js ve Python, odağımda Java ve Spring Boot.',
     'contact.eyebrow': 'İletişim',
     'contact.title': 'Güvenilir bir şeyler inşa edelim.',
     'contact.subtitle':
