@@ -1,18 +1,18 @@
 ---
 title: Viducate
 tagline: Video learning platform with enterprise sign-in
-summary: An online education platform for structured video courses, quizzes and progress tracking — large video uploads, byte-range streaming, FFmpeg processing and JWT + LDAP authentication with three roles.
+summary: An online education platform for structured video courses, quizzes and progress tracking — chunked video uploads, FFmpeg transcoding, byte-range streaming and JWT + LDAP authentication with three roles.
 order: 1
 role: Backend & video delivery
-stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Docker, Nginx, JWT, LDAP]
+stack: [Node.js, Express, PostgreSQL, Sequelize, FFmpeg, Nginx, PM2, JWT, LDAP]
 repo: https://github.com/utku-kucuk/viducate
 live: https://utku-kucuk.github.io/viducate/
 diagram: viducate
 highlights:
-  - Large lecture uploads with byte-range streaming for smooth playback
+  - Chunked lecture uploads, FFmpeg transcoding and byte-range streaming
   - JWT + LDAP / Active Directory sign-in with just-in-time provisioning
   - Admin / Teacher / Student roles, quizzes and progress tracking
-  - Deployed on Linux behind Nginx, with Docker and PM2 setups
+  - Deployed on Linux with PM2 behind an Nginx reverse proxy
 ---
 
 ## The problem
@@ -23,15 +23,15 @@ Lecture videos are large — often several gigabytes — and institutions want t
 
 I designed the backend and the **video delivery** of Viducate, a platform for structured video courses, quizzes and progress tracking.
 
-- **Uploads & processing.** Teachers upload lectures through a validated upload endpoint with configurable size limits; Nginx is tuned for multi-GB request bodies. FFmpeg generates thumbnails and reads durations, stored with the rest of the metadata in PostgreSQL.
+- **Uploads & processing.** Teachers upload lectures in chunks through a validated upload endpoint with configurable size limits; Nginx is tuned for multi-GB request bodies. FFmpeg reads durations and transcodes each video to 360p–1080p renditions without upscaling, stored with the rest of the metadata in PostgreSQL.
 - **Streaming that doesn't freeze.** Videos are served with HTTP **byte-range** support (`Accept-Ranges`), so players can seek and buffer large files instead of downloading them whole.
 - **Enterprise sign-in.** JWT authentication with three roles — **Admin**, **Teacher** and **Student** — plus **LDAP / Active Directory** login: local accounts are checked first, then the directory, and first-time corporate users are created just in time.
 - **Running a school.** Admins bulk-import users from CSV with emailed credentials; students take quizzes and track progress per video.
 
 ## Running it
 
-The API sits behind **Nginx** as a TLS-terminating reverse proxy on Linux, with Helmet, rate limiting and request validation in front of every route. Deployment templates cover both Docker and PM2.
+The API sits behind **Nginx** as a TLS-terminating reverse proxy on Linux, with Helmet, rate limiting and request validation in front of every route. The app runs under PM2, set up by a deployment script and template.
 
 ## What I'd improve
 
-Transcode uploads to HLS renditions on a queue-backed worker pool for adaptive bitrate, move video files to object storage behind a CDN, and resume interrupted uploads with chunking.
+Package the renditions as HLS on a queue-backed worker pool for adaptive bitrate, move video files to object storage behind a CDN, and containerise the stack with Docker.

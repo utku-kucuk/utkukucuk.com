@@ -55,29 +55,6 @@ function initReveals() {
   });
 }
 
-function initCounters() {
-  const lang = document.documentElement.lang || 'en';
-  document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
-    const target = Number(el.dataset.count);
-    const decimals = Number(el.dataset.decimals ?? 0);
-    const format = new Intl.NumberFormat(lang, {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    }).format;
-    const state = { value: 0 };
-    el.textContent = format(0);
-    gsap.to(state, {
-      value: target,
-      duration: 1.8,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-      onUpdate: () => {
-        el.textContent = format(state.value);
-      },
-    });
-  });
-}
-
 function initTimeline() {
   document.querySelectorAll<HTMLElement>('[data-timeline]').forEach((list) => {
     const fill = list.querySelector('[data-timeline-fill]');
@@ -135,7 +112,6 @@ function initCursor() {
 if (!prefersReducedMotion()) {
   initSmoothScroll();
   initReveals();
-  initCounters();
   initTimeline();
   initScrollProgress();
   initCursor();
