@@ -9,9 +9,9 @@ export const defaultLocale: Locale = 'en';
 
 export const ui = {
   en: {
-    'meta.title': 'Utku Küçük — Backend Developer · Java & Spring Boot',
+    'meta.title': 'Utku Küçük — Backend Engineer',
     'meta.description':
-      'Backend developer focused on Java and Spring Boot: microservices, REST APIs, PostgreSQL and Kubernetes, with production experience in Node.js and PHP. Based in Istanbul.',
+      'Backend engineer focused on Java and Spring Boot: microservices, REST APIs, PostgreSQL and Kubernetes, with production experience in Node.js and PHP. Based in Istanbul.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.work': 'Work',
@@ -24,7 +24,7 @@ export const ui = {
     'lang.switch': 'Türkçe',
     'lang.switchLabel': 'Bu sayfayı Türkçe görüntüle',
     'hero.greeting': 'Hi, I’m',
-    'hero.role': 'Java & Spring Boot Backend Developer',
+    'hero.role': 'Backend Engineer',
     'hero.tagline':
       'I build the services behind products — REST APIs, data models and the Docker, Nginx and CI/CD setup that ships them.',
     'hero.cta.work': 'Selected work',
@@ -34,7 +34,7 @@ export const ui = {
     'about.eyebrow': 'About',
     'about.title': 'I build backend systems — and the setup that ships them.',
     'about.p1':
-      'I’m Utku — a backend developer in Istanbul and a 2025 Computer Engineering graduate. I’ve built REST APIs and backend services with PHP (Laravel), Node.js/TypeScript and Python, and I’m focusing on Java and Spring Boot.',
+      'I’m Utku — a backend engineer in Istanbul and a 2025 Computer Engineering graduate. I’ve built REST APIs and backend services with PHP (Laravel), Node.js/TypeScript and Python, and I’m focusing on Java and Spring Boot.',
     'about.p2':
       'At Covalent, on corporate client projects and in a university UAV R&D team I’ve worked on Web3 data APIs, admin panels and image processing — and I care about the part after the merge too: containers, reverse proxies, CI/CD and logs.',
     'about.p3':
@@ -99,9 +99,9 @@ export const ui = {
     'footer.top': 'Back to top',
   },
   tr: {
-    'meta.title': 'Utku Küçük — Backend Developer · Java & Spring Boot',
+    'meta.title': 'Utku Küçük — Backend Engineer',
     'meta.description':
-      'Java ve Spring Boot odaklı Backend Developer: mikroservisler, REST API’ler, PostgreSQL ve Kubernetes; Node.js ve PHP ile canlı ortam deneyimi. İstanbul.',
+      'Java ve Spring Boot odaklı Backend Engineer: mikroservisler, REST API’ler, PostgreSQL ve Kubernetes; Node.js ve PHP ile canlı ortam deneyimi. İstanbul.',
     'nav.about': 'Hakkımda',
     'nav.experience': 'Deneyim',
     'nav.work': 'Projeler',
@@ -114,7 +114,7 @@ export const ui = {
     'lang.switch': 'English',
     'lang.switchLabel': 'View this page in English',
     'hero.greeting': 'Merhaba, ben',
-    'hero.role': 'Java & Spring Boot Backend Developer',
+    'hero.role': 'Backend Engineer',
     'hero.tagline':
       'Ürünlerin arkasındaki servisleri geliştiriyorum: REST API’ler, veri modelleri ve onları yayına alan Docker, Nginx ve CI/CD kurulumu.',
     'hero.cta.work': 'Projelerim',
@@ -124,7 +124,7 @@ export const ui = {
     'about.eyebrow': 'Hakkımda',
     'about.title': 'Backend sistemleri ve onları yayına alan altyapıyı geliştiriyorum.',
     'about.p1':
-      'Ben Utku — İstanbul’da yaşayan, 2025 Bilgisayar Mühendisliği mezunu bir backend developer’ım. PHP (Laravel), Node.js/TypeScript ve Python ile REST API’ler ve backend servisleri geliştirdim; odağım Java ve Spring Boot.',
+      'Ben Utku — İstanbul’da yaşayan, 2025 Bilgisayar Mühendisliği mezunu bir backend engineer’ım. PHP (Laravel), Node.js/TypeScript ve Python ile REST API’ler ve backend servisleri geliştirdim; odağım Java ve Spring Boot.',
     'about.p2':
       'Covalent’te, kurumsal müşteri projelerinde ve bir üniversite İHA Ar-Ge takımında Web3 veri API’leri, yönetim panelleri ve görüntü işleme üzerinde çalıştım. Merge sonrasını da önemsiyorum: container’lar, reverse proxy’ler, CI/CD ve loglar.',
     'about.p3':
