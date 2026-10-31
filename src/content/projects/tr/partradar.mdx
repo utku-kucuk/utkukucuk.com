@@ -1,0 +1,55 @@
+---
+title: PartRadar
+tagline: İhtiyacın olan oto parçası, yakındaki dükkânda, stokta
+summary: Sürücünün parça talebini yakındaki oto yedek parça dükkânlarına yönlendiren, Java 25 ve Spring Boot 4 ile geliştirdiğim event tabanlı mikroservis platformu. PostGIS ile arama, Keycloak ile güvenlik ve Helm ile Kubernetes'e deploy.
+order: 0
+status: in-progress
+role: Backend ve platform — tasarım ve geliştirme
+stack:
+  [
+    Java 25,
+    Spring Boot 4,
+    Spring Cloud Gateway,
+    Spring Security,
+    Keycloak,
+    PostgreSQL + PostGIS,
+    Flyway,
+    Testcontainers,
+    Kubernetes,
+    Helm,
+    GitHub Actions,
+  ]
+repo: https://github.com/utku-kucuk/partradar
+diagram: partradar
+highlights:
+  - REST API'leriyle dükkân kaydı ve PostGIS ile yakındaki dükkân araması
+  - Keycloak JWT ile Spring Cloud Gateway ve paylaşılan platform kütüphanesi
+  - Testcontainers entegrasyon testleri ve CI'da kind üzerinde uçtan uca smoke test
+  - Planlanan — Kafka ile talep yönlendirme, RabbitMQ ile bildirimler
+---
+
+## Neden bu proje
+
+Her şey bir sanayi sitesinde başladı. Araba liftteydi, usta arızalı parçayı bulmuştu ve iş orada durdu: yakındaki hangi dükkânda o parçanın olduğunu kimse bilmiyordu. Öğleden sonrayı dükkânları arayıp tezgâhtan tezgâha yürüyerek geçirdik. Parça sonunda üç sokak ötede, baştan beri durduğu rafta bulundu.
+
+Dükkân sahipleri aynı sorunu öbür taraftan yaşıyordu: bütün gün aynı telefonlara cevap veriyor, bulunabilmek için basit bir yolları yoktu. PartRadar bu boşluğu kapatıyor: araç ve parça bir kez tarif ediliyor, talep en uygun yakın dükkânlara gidiyor, dükkânlar da stok, fiyat ve teslim süresiyle cevap veriyor.
+
+## Mimari
+
+Diyagram **hedef** tasarımı gösteriyor. Önemli her karar repoda ADR olarak kayıtlı.
+
+- **Her servisin kendi veritabanı.** Shop, inquiry ve notification servislerinin önünde bir API gateway (Spring Cloud Gateway) var; paylaşılan tablo yok.
+- **Önce konum.** Shop servisi dükkânları **PostGIS** ile PostgreSQL'de tutuyor ve talebe en yakın, en uygun dükkânları buluyor.
+- **Güvenlik uçta.** Keycloak OIDC token'ları üretiyor; paylaşılan platform kütüphanesi realm rollerini eşliyor ve her servise aynı hata yönetimini veriyor.
+- **Farklı işler için Kafka ve RabbitMQ.** Domain event'leri transactional outbox ile Kafka üzerinden (sıralı, tekrar oynatılabilir); bildirim komutları ise yeniden deneme ve dead-letter queue ile RabbitMQ üzerinden gidiyor.
+
+## Şu anki durum
+
+Demo verisiyle çalışan, **aktif olarak geliştirilen** bir proje. Dükkân kaydı ve yakındaki dükkân araması REST API'leriyle uçtan uca çalışıyor; Flyway migration'ları ve Testcontainers entegrasyon testleri hazır. Servisler Helm ile paketlenip CI'da yerel bir **kind** cluster'ına deploy ediliyor; her değişiklikte uçtan uca smoke test, CodeQL taraması ve release otomasyonu çalışıyor.
+
+## Yol haritası
+
+1. Talepler ve teklifler, outbox üzerinden Kafka'ya.
+2. Her talebin doğru yakın dükkânlara yönlendirilmesi.
+3. RabbitMQ üzerinden, yeniden denemeli ve DLQ'lu e-posta bildirimleri.
+4. OpenTelemetry ile tracing, ardından Argo CD ile Oracle Cloud'da canlı ortam.

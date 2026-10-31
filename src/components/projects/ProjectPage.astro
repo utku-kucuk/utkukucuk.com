@@ -106,15 +106,21 @@ const { Content } = await render(project);
                   {t('project.liveDemo')} ↗
                 </a>
               )}
-              <a
-                href={data.repo}
-                target="_blank"
-                rel="noopener"
-                data-magnetic="0.2"
-                class="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-fg-subtle"
-              >
-                {t('project.viewSource')} ↗
-              </a>
+              {data.repo ? (
+                <a
+                  href={data.repo}
+                  target="_blank"
+                  rel="noopener"
+                  data-magnetic="0.2"
+                  class="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-fg-subtle"
+                >
+                  {t('project.viewSource')} ↗
+                </a>
+              ) : (
+                <span class="inline-flex items-center gap-2 rounded-full border border-dashed border-line px-5 py-2.5 text-sm text-fg-muted">
+                  {t('work.private')}
+                </span>
+              )}
             </div>
           </div>
         </aside>
