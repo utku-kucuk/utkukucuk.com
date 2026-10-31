@@ -12,10 +12,19 @@ const projects = defineCollection({
     order: z.number(),
     role: z.string(),
     stack: z.array(z.string()),
-    repo: z.url(),
+    // omitted for private repositories
+    repo: z.url().optional(),
     live: z.url().optional(),
     status: z.enum(['in-progress']).optional(),
-    diagram: z.enum(['commerce', 'viducate', 'ironecho', 'smarthome', 'hirehub', 'portfolio']),
+    diagram: z.enum([
+      'partradar',
+      'commerce',
+      'viducate',
+      'ironecho',
+      'smarthome',
+      'hirehub',
+      'portfolio',
+    ]),
     highlights: z.array(z.string()).max(4),
   }),
 });

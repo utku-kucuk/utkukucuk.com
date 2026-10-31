@@ -9,9 +9,9 @@ export const defaultLocale: Locale = 'en';
 
 export const ui = {
   en: {
-    'meta.title': 'Utku Küçük — Backend Developer',
+    'meta.title': 'Utku Küçük — Backend Developer · Java & Spring Boot',
     'meta.description':
-      'Backend developer building REST APIs and backend services with PHP, Node.js and Python, focused on Java and Spring Boot. Based in Istanbul.',
+      'Backend developer focused on Java and Spring Boot: microservices, REST APIs, PostgreSQL and Kubernetes, with production experience in Node.js and PHP. Based in Istanbul.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.work': 'Work',
@@ -24,7 +24,7 @@ export const ui = {
     'lang.switch': 'Türkçe',
     'lang.switchLabel': 'Bu sayfayı Türkçe görüntüle',
     'hero.greeting': 'Hi, I’m',
-    'hero.role': 'Backend Developer',
+    'hero.role': 'Java & Spring Boot Backend Developer',
     'hero.tagline':
       'I build the services behind products — REST APIs, data models and the Docker, Nginx and CI/CD setup that ships them.',
     'hero.cta.work': 'Selected work',
@@ -60,6 +60,7 @@ export const ui = {
     'work.live': 'Open live demo',
     'work.liveLabel': 'Live',
     'work.inProgress': 'In progress',
+    'work.private': 'Private repository',
     'work.more': 'More on GitHub',
     'work.drag': 'Scroll to explore',
     'project.back': 'All projects',
@@ -98,9 +99,9 @@ export const ui = {
     'footer.top': 'Back to top',
   },
   tr: {
-    'meta.title': 'Utku Küçük — Backend Developer',
+    'meta.title': 'Utku Küçük — Backend Developer · Java & Spring Boot',
     'meta.description':
-      'PHP, Node.js ve Python ile REST API’ler ve backend servisleri geliştiren, Java ve Spring Boot’a odaklanan Backend Developer. İstanbul.',
+      'Java ve Spring Boot odaklı Backend Developer: mikroservisler, REST API’ler, PostgreSQL ve Kubernetes; Node.js ve PHP ile canlı ortam deneyimi. İstanbul.',
     'nav.about': 'Hakkımda',
     'nav.experience': 'Deneyim',
     'nav.work': 'Projeler',
@@ -113,7 +114,7 @@ export const ui = {
     'lang.switch': 'English',
     'lang.switchLabel': 'View this page in English',
     'hero.greeting': 'Merhaba, ben',
-    'hero.role': 'Backend Developer',
+    'hero.role': 'Java & Spring Boot Backend Developer',
     'hero.tagline':
       'Ürünlerin arkasındaki servisleri geliştiriyorum: REST API’ler, veri modelleri ve onları yayına alan Docker, Nginx ve CI/CD kurulumu.',
     'hero.cta.work': 'Projelerim',
@@ -149,6 +150,7 @@ export const ui = {
     'work.live': 'Canlı demoyu aç',
     'work.liveLabel': 'Canlı',
     'work.inProgress': 'Geliştiriliyor',
+    'work.private': 'Private repo',
     'work.more': 'GitHub’da daha fazlası',
     'work.drag': 'Keşfetmek için kaydır',
     'project.back': 'Tüm projeler',

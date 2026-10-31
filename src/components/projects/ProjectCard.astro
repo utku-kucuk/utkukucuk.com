@@ -103,14 +103,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
       >
         {t('work.caseStudy')} →
       </a>
-      <a
-        href={data.repo}
-        target="_blank"
-        rel="noopener"
-        class="relative z-20 text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline"
-      >
-        {t('work.source')} ↗
-      </a>
+      {data.repo ? (
+        <a
+          href={data.repo}
+          target="_blank"
+          rel="noopener"
+          class="relative z-20 text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline"
+        >
+          {t('work.source')} ↗
+        </a>
+      ) : (
+        <span class="text-fg-subtle">{t('work.private')}</span>
+      )}
     </div>
   </footer>
 </article>

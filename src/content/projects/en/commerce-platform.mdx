@@ -1,12 +1,11 @@
 ---
 title: Commerce Platform
 tagline: E-commerce backend on Spring Boot
-summary: An e-commerce backend I'm building in the open with Java 21 and Spring Boot 3 — starting from the domain model and growing towards domain-split services, JWT security and event-driven orders.
+summary: An e-commerce backend I'm building in a private repository with Java 21 and Spring Boot 3 — starting from the domain model and growing towards domain-split services, JWT security and event-driven orders.
 order: 3
 status: in-progress
 role: Backend engineer — design & implementation
 stack: [Java 21, Spring Boot 3, Spring Data JPA, H2, Maven]
-repo: https://github.com/utku-kucuk/commerce-platform
 diagram: commerce
 highlights:
   - Domain model for users, roles, products, addresses and order status
@@ -32,4 +31,4 @@ The architecture diagram shows the **target** design, built in this order:
 3. **Tests that matter** — unit tests with JUnit and Mockito, integration tests against real PostgreSQL via Testcontainers, all running in GitHub Actions.
 4. **Asynchronous order flow** with events over Kafka, and the whole stack running from a single Docker Compose file.
 
-Follow the repository to see each step land.
+The repository stays private while the core takes shape; I'm happy to walk through the code in an interview.

@@ -1,12 +1,11 @@
 ---
 title: Commerce Platform
 tagline: Spring Boot üzerinde e-ticaret backend'i
-summary: Java 21 ve Spring Boot 3 ile açık kaynak olarak geliştirdiğim bir e-ticaret backend'i. Alan modelinden başlayıp alan bazlı servislere, JWT güvenliğine ve event tabanlı siparişlere doğru ilerliyor.
+summary: Java 21 ve Spring Boot 3 ile private bir repoda geliştirdiğim bir e-ticaret backend'i. Alan modelinden başlayıp alan bazlı servislere, JWT güvenliğine ve event tabanlı siparişlere doğru ilerliyor.
 order: 3
 status: in-progress
 role: Backend mühendisi — tasarım ve geliştirme
 stack: [Java 21, Spring Boot 3, Spring Data JPA, H2, Maven]
-repo: https://github.com/utku-kucuk/commerce-platform
 diagram: commerce
 highlights:
   - Kullanıcılar, roller, ürünler, adresler ve sipariş durumu için alan modeli
@@ -32,4 +31,4 @@ Mimari diyagram **hedef** tasarımı gösteriyor. Sıralama şöyle:
 3. **Anlamlı testler:** JUnit ve Mockito ile unit testler, Testcontainers ile gerçek PostgreSQL'e karşı integration testler; hepsi GitHub Actions'ta çalışıyor.
 4. Kafka üzerinden event'lerle **asenkron sipariş akışı** ve tüm stack'in tek bir Docker Compose dosyasından ayağa kalkması.
 
-Her adımın eklenişini repodan takip edebilirsiniz.
+Temel yapı oturana kadar repo private kalıyor; mülakatta kodu birlikte inceleyebiliriz.

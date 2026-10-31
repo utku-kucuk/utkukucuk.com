@@ -26,6 +26,39 @@ export interface Diagram {
 }
 
 export const diagrams: Record<string, Diagram> = {
+  partradar: {
+    group: { label: 'kubernetes · helm', x: 96, y: 14, w: 298, h: 212 },
+    nodes: [
+      { id: 'web', label: 'Web app', sub: 'Next.js', x: 6, y: 98, w: 76, kind: 'client' },
+      { id: 'gw', label: 'Gateway', sub: 'Keycloak JWT', x: 106, y: 98, w: 92, kind: 'edge' },
+      {
+        id: 'shop',
+        label: 'shop-service',
+        sub: 'PostGIS search',
+        x: 216,
+        y: 30,
+        w: 100,
+        kind: 'service',
+      },
+      {
+        id: 'inquiry',
+        label: 'inquiry-service',
+        sub: 'quotes',
+        x: 216,
+        y: 166,
+        w: 100,
+        kind: 'service',
+      },
+      { id: 'kafka', label: 'Kafka', sub: 'events', x: 330, y: 98, w: 60, kind: 'data' },
+    ],
+    edges: [
+      { from: 'web', to: 'gw' },
+      { from: 'gw', to: 'shop' },
+      { from: 'gw', to: 'inquiry' },
+      { from: 'inquiry', to: 'kafka' },
+      { from: 'kafka', to: 'shop' },
+    ],
+  },
   commerce: {
     group: { label: 'target · docker compose', x: 128, y: 14, w: 262, h: 212 },
     nodes: [

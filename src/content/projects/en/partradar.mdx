@@ -1,0 +1,55 @@
+---
+title: PartRadar
+tagline: Find the car part you need, in stock nearby
+summary: An event-driven microservices platform on Java 25 and Spring Boot 4 that routes a driver's part request to nearby auto-parts shops — PostGIS search, Keycloak security and Kubernetes deploys with Helm.
+order: 0
+status: in-progress
+role: Backend & platform — design & implementation
+stack:
+  [
+    Java 25,
+    Spring Boot 4,
+    Spring Cloud Gateway,
+    Spring Security,
+    Keycloak,
+    PostgreSQL + PostGIS,
+    Flyway,
+    Testcontainers,
+    Kubernetes,
+    Helm,
+    GitHub Actions,
+  ]
+repo: https://github.com/utku-kucuk/partradar
+diagram: partradar
+highlights:
+  - Shop registration and PostGIS nearby search behind REST APIs
+  - Spring Cloud Gateway with Keycloak JWT and a shared platform library
+  - Testcontainers integration tests and an end-to-end smoke test on kind in CI
+  - Planned — inquiry routing over Kafka, notifications over RabbitMQ
+---
+
+## Why I built this
+
+It started in an industrial zone. My car was on the lift, the mechanic had found the faulty part, and the job stopped there: nobody knew which shop nearby actually had it. We spent the afternoon calling shops and walking from counter to counter. The part was eventually found three streets away, on a shelf where it had been all along.
+
+The shop owners had the same problem from the other side — answering the same calls all day, with no simple way to be found. PartRadar closes that gap: describe the vehicle and the part once, the request goes to the most relevant nearby shops, and they reply with availability, price and delivery time.
+
+## Architecture
+
+The diagram shows the **target** design. Every significant decision is recorded as an ADR in the repository.
+
+- **Microservices with a database each.** An API gateway (Spring Cloud Gateway) in front of shop, inquiry and notification services; no shared tables.
+- **Location first.** The shop service stores shops in PostgreSQL with **PostGIS** and finds the best matches near a request.
+- **Security at the edge.** Keycloak issues OIDC tokens; a shared platform library maps realm roles and gives every service the same error handling.
+- **Kafka and RabbitMQ for different jobs.** Domain events go over Kafka (ordered, replayable) with a transactional outbox; notification commands go over RabbitMQ with retries and a dead-letter queue.
+
+## Where it stands
+
+This is an **in-progress** project running on demo data. Shop registration and nearby search work end to end through REST APIs, with Flyway migrations and Testcontainers integration tests. The services are packaged with Helm and deployed to a local **kind** cluster in CI, where an end-to-end smoke test runs on every change, alongside CodeQL scanning and release automation.
+
+## Roadmap
+
+1. Inquiries and quotes, published to Kafka through the outbox.
+2. Routing each inquiry to the right nearby shops.
+3. E-mail notifications over RabbitMQ with retries and a DLQ.
+4. Tracing with OpenTelemetry, then a live environment on Oracle Cloud with Argo CD.
