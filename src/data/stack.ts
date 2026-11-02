@@ -1,4 +1,5 @@
 import {
+  siApachekafka,
   siApachemaven,
   siDjango,
   siDocker,
@@ -33,6 +34,7 @@ import {
   siPostgresql,
   siPostman,
   siPython,
+  siRabbitmq,
   siRedis,
   siSpringboot,
   siSqlite,
@@ -78,6 +80,8 @@ export const stack: StackGroup[] = [
       { name: 'OpenAPI', icon: siOpenapiinitiative },
       { name: 'JWT · RBAC' },
       { name: 'Keycloak', icon: siKeycloak },
+      { name: 'Apache Kafka', icon: siApachekafka },
+      { name: 'RabbitMQ', icon: siRabbitmq },
       { name: 'Microservices' },
     ],
   },

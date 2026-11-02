@@ -3,7 +3,6 @@ title: PartRadar
 tagline: İhtiyacın olan oto parçası, yakındaki dükkânda, stokta
 summary: Sürücünün parça talebini yakındaki oto yedek parça dükkânlarına yönlendiren, Java 25 ve Spring Boot 4 ile geliştirdiğim event tabanlı mikroservis platformu. PostGIS ile arama, Keycloak ile güvenlik ve Helm ile Kubernetes'e deploy.
 order: 0
-status: in-progress
 role: Backend ve platform — tasarım ve geliştirme
 stack:
   [
@@ -12,6 +11,8 @@ stack:
     Spring Cloud Gateway,
     Spring Security,
     Keycloak,
+    Apache Kafka,
+    RabbitMQ,
     PostgreSQL + PostGIS,
     Flyway,
     Testcontainers,
@@ -25,7 +26,7 @@ highlights:
   - REST API'leriyle dükkân kaydı ve PostGIS ile yakındaki dükkân araması
   - Keycloak JWT ile Spring Cloud Gateway ve paylaşılan platform kütüphanesi
   - Testcontainers entegrasyon testleri ve CI'da kind üzerinde uçtan uca smoke test
-  - Planlanan — Kafka ile talep yönlendirme, RabbitMQ ile bildirimler
+  - Transactional outbox ile Kafka üzerinden talep yönlendirme, yeniden denemeli ve DLQ'lu RabbitMQ bildirimleri
 ---
 
 ## Neden bu proje
@@ -36,20 +37,20 @@ Dükkân sahipleri aynı sorunu öbür taraftan yaşıyordu: bütün gün aynı 
 
 ## Mimari
 
-Diyagram **hedef** tasarımı gösteriyor. Önemli her karar repoda ADR olarak kayıtlı.
+Diyagram mimariyi gösteriyor. Önemli her karar repoda ADR olarak kayıtlı.
 
 - **Her servisin kendi veritabanı.** Shop, inquiry ve notification servislerinin önünde bir API gateway (Spring Cloud Gateway) var; paylaşılan tablo yok.
 - **Önce konum.** Shop servisi dükkânları **PostGIS** ile PostgreSQL'de tutuyor ve talebe en yakın, en uygun dükkânları buluyor.
 - **Güvenlik uçta.** Keycloak OIDC token'ları üretiyor; paylaşılan platform kütüphanesi realm rollerini eşliyor ve her servise aynı hata yönetimini veriyor.
 - **Farklı işler için Kafka ve RabbitMQ.** Domain event'leri transactional outbox ile Kafka üzerinden (sıralı, tekrar oynatılabilir); bildirim komutları ise yeniden deneme ve dead-letter queue ile RabbitMQ üzerinden gidiyor.
 
-## Şu anki durum
+## Uçtan uca nasıl çalışıyor
 
-Demo verisiyle çalışan, **aktif olarak geliştirilen** bir proje. Dükkân kaydı ve yakındaki dükkân araması REST API'leriyle uçtan uca çalışıyor; Flyway migration'ları ve Testcontainers entegrasyon testleri hazır. Servisler Helm ile paketlenip CI'da yerel bir **kind** cluster'ına deploy ediliyor; her değişiklikte uçtan uca smoke test, CodeQL taraması ve release otomasyonu çalışıyor.
+Dükkânlar REST API'leriyle kaydoluyor ve konuma göre bulunuyor. Sürücünün talebi kaydedilip transactional outbox ile **Kafka**'ya yayınlanıyor, en uygun yakın dükkânlara yönlendiriliyor ve bu dükkânlara **RabbitMQ** üzerinden, yeniden denemeli ve dead-letter queue'lu e-posta bildirimi gidiyor; consumer'lar idempotent olduğu için tekrar gelen event'ler sorun çıkarmıyor.
 
-## Yol haritası
+Her servis Flyway migration'ları ve Testcontainers entegrasyon testleriyle kapsanıyor. Servisler Helm ile paketlenip CI'da bir **kind** cluster'ına deploy ediliyor; her değişiklikte uçtan uca smoke test, CodeQL taraması ve release otomasyonu çalışıyor.
 
-1. Talepler ve teklifler, outbox üzerinden Kafka'ya.
-2. Her talebin doğru yakın dükkânlara yönlendirilmesi.
-3. RabbitMQ üzerinden, yeniden denemeli ve DLQ'lu e-posta bildirimleri.
-4. OpenTelemetry ile tracing, ardından Argo CD ile Oracle Cloud'da canlı ortam.
+## Sırada ne var
+
+1. OpenTelemetry ile tracing.
+2. Argo CD ile Oracle Cloud'da canlı ortam.
