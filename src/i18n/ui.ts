@@ -38,7 +38,7 @@ export const ui = {
     'about.p2':
       'At Covalent, on corporate client projects and in a university UAV R&D team I’ve worked on Web3 data APIs, admin panels and image processing — and I care about the part after the merge too: containers, reverse proxies, CI/CD and logs.',
     'about.p3':
-      'Right now I’m building a Spring Boot e-commerce backend in the open and reviewing R&D projects at Zaim Teknopark.',
+      'Right now I’m building a Spring Boot e-commerce backend and reviewing R&D projects at Zaim Teknopark.',
     'about.now': 'Now',
     'about.now.text': 'R&D Project Evaluator · Zaim Teknopark',
     'about.learning': 'Focus',
@@ -128,7 +128,7 @@ export const ui = {
     'about.p2':
       'Covalent’te, kurumsal müşteri projelerinde ve bir üniversite İHA Ar-Ge takımında Web3 veri API’leri, yönetim panelleri ve görüntü işleme üzerinde çalıştım. Merge sonrasını da önemsiyorum: container’lar, reverse proxy’ler, CI/CD ve loglar.',
     'about.p3':
-      'Şu anda açık kaynak bir Spring Boot e-ticaret backend’i geliştiriyor, Zaim Teknopark’ta Ar-Ge projelerini değerlendiriyorum.',
+      'Şu anda bir Spring Boot e-ticaret backend’i geliştiriyor, Zaim Teknopark’ta Ar-Ge projelerini değerlendiriyorum.',
     'about.now': 'Şu an',
     'about.now.text': 'Ar-Ge Proje Değerlendiricisi · Zaim Teknopark',
     'about.learning': 'Odak',
